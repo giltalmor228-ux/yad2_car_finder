@@ -1,0 +1,696 @@
+{
+  "אבארט": {
+    "yad2_manufacturer_id": null,
+    "name_he": "אבארט",
+    "name_en": "Abarth",
+    "models": {
+      "11861": {
+        "name": "124 ספיידר",
+        "source_file": "Pasted text(10).txt"
+      },
+      "11862": {
+        "name": "500",
+        "source_file": "Pasted text(10).txt"
+      },
+      "13308": {
+        "name": "500E",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10805": {
+        "name": "595",
+        "source_file": "Pasted text(10).txt"
+      },
+      "11863": {
+        "name": "695",
+        "source_file": "Pasted text(10).txt"
+      },
+      "13588": {
+        "name": "פונטו איבו",
+        "source_file": "Pasted text(10).txt"
+      }
+    }
+  },
+  "טויוטה": {
+    "yad2_manufacturer_id": 19,
+    "name_he": "טויוטה",
+    "name_en": "Toyota",
+    "models": {
+      "10225": {
+        "name": "C-HR",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13790": {
+        "name": "C-HR+",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10228": {
+        "name": "FJ קרוזר",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10217": {
+        "name": "GT86",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10234": {
+        "name": "MR 2",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10238": {
+        "name": "RAV4",
+        "source_file": "Pasted text(11).txt"
+      },
+      "12894": {
+        "name": "bZ4X",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10232": {
+        "name": "iQ",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10219": {
+        "name": "אוולון",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10220": {
+        "name": "אוונסיס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10218": {
+        "name": "אוריס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10221": {
+        "name": "אייגו",
+        "source_file": "Pasted text(11).txt"
+      },
+      "12897": {
+        "name": "אייגו X",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13237": {
+        "name": "גראנד היילנדר",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10229": {
+        "name": "הייאס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10230": {
+        "name": "היילנדר",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10231": {
+        "name": "היילקס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13373": {
+        "name": "היילקס ויגו",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10244": {
+        "name": "ונזה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10245": {
+        "name": "ורסו",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10246": {
+        "name": "ורסו-S",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10243": {
+        "name": "טאקומה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "11215": {
+        "name": "טונדרה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10247": {
+        "name": "יאריס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13386": {
+        "name": "יאריס GR",
+        "source_file": "Pasted text(11).txt"
+      },
+      "11228": {
+        "name": "יאריס קרוס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10233": {
+        "name": "לנד קרוזר",
+        "source_file": "Pasted text(11).txt"
+      },
+      "11212": {
+        "name": "סופרה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10242": {
+        "name": "סטארלט",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10240": {
+        "name": "סיינה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10224": {
+        "name": "סליקה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10239": {
+        "name": "סקויה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10216": {
+        "name": "פור-ראנר",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13093": {
+        "name": "פרואייס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13836": {
+        "name": "פרואייס מקס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10237": {
+        "name": "פרואייס סיטי",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10235": {
+        "name": "פריוויה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10236": {
+        "name": "פריוס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13238": {
+        "name": "פריוס פלוס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10222": {
+        "name": "קאמרי",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10226": {
+        "name": "קורולה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10227": {
+        "name": "קורולה ורסו",
+        "source_file": "Pasted text(11).txt"
+      },
+      "11150": {
+        "name": "קורולה קרוס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "11157": {
+        "name": "קראון",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10223": {
+        "name": "קרינה",
+        "source_file": "Pasted text(11).txt"
+      }
+    }
+  },
+  "יונדאי": {
+    "yad2_manufacturer_id": null,
+    "name_he": "יונדאי",
+    "name_en": "Hyundai",
+    "models": {
+      "10268": {
+        "name": "H-1 / i800",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10269": {
+        "name": "H100",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10271": {
+        "name": "H350",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13435": {
+        "name": "I20 קרוס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13137": {
+        "name": "I20N",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13138": {
+        "name": "I30N",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13276": {
+        "name": "I35",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10272": {
+        "name": "i10",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10273": {
+        "name": "i20",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10276": {
+        "name": "i30",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10277": {
+        "name": "i40",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10280": {
+        "name": "ix20",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10281": {
+        "name": "ix35",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10282": {
+        "name": "ix55",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10260": {
+        "name": "אטוס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10279": {
+        "name": "איוניק",
+        "source_file": "Pasted text(11).txt"
+      },
+      "11239": {
+        "name": "איוניק 5",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13427": {
+        "name": "איוניק 5 N",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13099": {
+        "name": "איוניק 6",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10263": {
+        "name": "אלנטרה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13702": {
+        "name": "אלנטרה N",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10275": {
+        "name": "אקסנט",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10259": {
+        "name": "אקסנט i25",
+        "source_file": "Pasted text(11).txt"
+      },
+      "11234": {
+        "name": "באיון",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10265": {
+        "name": "ג'נסיס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10264": {
+        "name": "גאלופר",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10266": {
+        "name": "גטס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10267": {
+        "name": "גרנדיור",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10292": {
+        "name": "ולוסטר",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10293": {
+        "name": "וניו",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10289": {
+        "name": "טאראקן",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10291": {
+        "name": "טוסון",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10290": {
+        "name": "טרג'ט",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10284": {
+        "name": "לנטרה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10285": {
+        "name": "מטריקס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10288": {
+        "name": "סונטה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "12925": {
+        "name": "סטאריה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10287": {
+        "name": "סנטה פה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10286": {
+        "name": "פליסייד",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10283": {
+        "name": "קונה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10262": {
+        "name": "קופה",
+        "source_file": "Pasted text(11).txt"
+      }
+    }
+  },
+  "מאזדה": {
+    "yad2_manufacturer_id": null,
+    "name_he": "מאזדה",
+    "name_en": "Mazda",
+    "models": {
+      "10330": {
+        "name": "121",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10331": {
+        "name": "2",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10332": {
+        "name": "3",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10333": {
+        "name": "323",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10334": {
+        "name": "5",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10335": {
+        "name": "6",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10336": {
+        "name": "626",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10338": {
+        "name": "B-series",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10339": {
+        "name": "BT-50",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10340": {
+        "name": "CX-3",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10341": {
+        "name": "CX-30",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10342": {
+        "name": "CX-5",
+        "source_file": "Pasted text(11).txt"
+      },
+      "12966": {
+        "name": "CX-50",
+        "source_file": "Pasted text(11).txt"
+      },
+      "12986": {
+        "name": "CX-60",
+        "source_file": "Pasted text(11).txt"
+      },
+      "11311": {
+        "name": "CX-9",
+        "source_file": "Pasted text(11).txt"
+      },
+      "13104": {
+        "name": "CX-90",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10345": {
+        "name": "MPV",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10346": {
+        "name": "MX-3",
+        "source_file": "Pasted text(11).txt"
+      },
+      "11322": {
+        "name": "MX-30",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10347": {
+        "name": "MX-5",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10343": {
+        "name": "דמיו",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10350": {
+        "name": "טריביוט",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10348": {
+        "name": "פרמסי",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10351": {
+        "name": "קסדוס 6",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10352": {
+        "name": "קסדוס 9",
+        "source_file": "Pasted text(11).txt"
+      }
+    }
+  },
+  "ניסאן": {
+    "yad2_manufacturer_id": null,
+    "name_he": "ניסאן",
+    "name_en": "Nissan",
+    "models": {
+      "10425": {
+        "name": "200 SX",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10427": {
+        "name": "370Z",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10432": {
+        "name": "GT-R",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10443": {
+        "name": "NV200",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10429": {
+        "name": "אלטימה",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10428": {
+        "name": "אלמרה",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10457": {
+        "name": "אקס טרייל",
+        "source_file": "Pasted text(10).txt"
+      },
+      "11485": {
+        "name": "אקסטרה",
+        "source_file": "Pasted text(10).txt"
+      },
+      "11435": {
+        "name": "אריה",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10430": {
+        "name": "ארמדה",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10433": {
+        "name": "ג'וק",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10446": {
+        "name": "ווינר",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10455": {
+        "name": "טידה",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10454": {
+        "name": "טראנו",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10435": {
+        "name": "לארגו",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10436": {
+        "name": "ליף",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10439": {
+        "name": "מוראנו",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10438": {
+        "name": "מיקרה",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10437": {
+        "name": "מקסימה",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10440": {
+        "name": "נבארה",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10441": {
+        "name": "נוט",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10451": {
+        "name": "סנטרה",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10452": {
+        "name": "סרנה",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10444": {
+        "name": "פאת'פיינדר",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10448": {
+        "name": "פולסר",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10445": {
+        "name": "פטרול",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10447": {
+        "name": "פרימרה",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10431": {
+        "name": "קבסטאר",
+        "source_file": "Pasted text(10).txt"
+      },
+      "10449": {
+        "name": "קשקאי",
+        "source_file": "Pasted text(10).txt"
+      }
+    }
+  },
+  "סוזוקי": {
+    "yad2_manufacturer_id": null,
+    "name_he": "סוזוקי",
+    "name_en": "Suzuki",
+    "models": {
+      "13057": {
+        "name": "S-Cross",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10498": {
+        "name": "SX4",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10501": {
+        "name": "XL7",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10492": {
+        "name": "איגניס",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10486": {
+        "name": "אלטו",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10487": {
+        "name": "בלנו",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10493": {
+        "name": "ג'ימני",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10491": {
+        "name": "גרנד ויטרה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10500": {
+        "name": "וואגון R+",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10499": {
+        "name": "ויטרה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10494": {
+        "name": "ליאנה",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10497": {
+        "name": "סוויפט",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10489": {
+        "name": "סלריו",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10495": {
+        "name": "סמוראי",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10496": {
+        "name": "ספלאש",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10488": {
+        "name": "קארי",
+        "source_file": "Pasted text(11).txt"
+      },
+      "10490": {
+        "name": "קרוסאובר",
+        "source_file": "Pasted text(11).txt"
+      }
+    }
+  }
+}

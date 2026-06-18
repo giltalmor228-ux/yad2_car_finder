@@ -1,0 +1,32 @@
+{
+  "base_score": 50,
+  "hard_reject_score": 0,
+  "minimum_score_to_notify": 70,
+  "positive": {
+    "private_ownership": 10,
+    "first_or_second_hand": 10,
+    "low_km": 10,
+    "has_service_history": 10,
+    "authorized_service_center": 8,
+    "commits_to_inspection": 10,
+    "long_test": 6,
+    "good_condition_words": 6,
+    "has_images": 5
+  },
+  "negative": {
+    "leasing_or_company": -20,
+    "paint_or_bodywork": -10,
+    "value_loss": -25,
+    "warning_lights": -25,
+    "high_km": -15,
+    "missing_price": -20,
+    "missing_images": -10,
+    "old_test_or_missing_test": -8
+  },
+  "hard_reject": {
+    "taxi": true,
+    "rental": true,
+    "accident_or_chassis": true,
+    "severe_mechanical": true
+  }
+}

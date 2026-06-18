@@ -1,0 +1,1306 @@
+[
+  {
+    "manufacturer_name": "אבארט",
+    "manufacturer_name_en": "Abarth",
+    "yad2_manufacturer_id": null,
+    "model_name": "124 ספיידר",
+    "yad2_model_id": 11861,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "אבארט",
+    "manufacturer_name_en": "Abarth",
+    "yad2_manufacturer_id": null,
+    "model_name": "500",
+    "yad2_model_id": 11862,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "אבארט",
+    "manufacturer_name_en": "Abarth",
+    "yad2_manufacturer_id": null,
+    "model_name": "500E",
+    "yad2_model_id": 13308,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "אבארט",
+    "manufacturer_name_en": "Abarth",
+    "yad2_manufacturer_id": null,
+    "model_name": "595",
+    "yad2_model_id": 10805,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "אבארט",
+    "manufacturer_name_en": "Abarth",
+    "yad2_manufacturer_id": null,
+    "model_name": "695",
+    "yad2_model_id": 11863,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "אבארט",
+    "manufacturer_name_en": "Abarth",
+    "yad2_manufacturer_id": null,
+    "model_name": "פונטו איבו",
+    "yad2_model_id": 13588,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "C-HR",
+    "yad2_model_id": 10225,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "C-HR+",
+    "yad2_model_id": 13790,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "FJ קרוזר",
+    "yad2_model_id": 10228,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "GT86",
+    "yad2_model_id": 10217,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "MR 2",
+    "yad2_model_id": 10234,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "RAV4",
+    "yad2_model_id": 10238,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "bZ4X",
+    "yad2_model_id": 12894,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "iQ",
+    "yad2_model_id": 10232,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "אוולון",
+    "yad2_model_id": 10219,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "אוונסיס",
+    "yad2_model_id": 10220,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "אוריס",
+    "yad2_model_id": 10218,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "אייגו",
+    "yad2_model_id": 10221,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "אייגו X",
+    "yad2_model_id": 12897,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "גראנד היילנדר",
+    "yad2_model_id": 13237,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "הייאס",
+    "yad2_model_id": 10229,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "היילנדר",
+    "yad2_model_id": 10230,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "היילקס",
+    "yad2_model_id": 10231,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "היילקס ויגו",
+    "yad2_model_id": 13373,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "ונזה",
+    "yad2_model_id": 10244,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "ורסו",
+    "yad2_model_id": 10245,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "ורסו-S",
+    "yad2_model_id": 10246,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "טאקומה",
+    "yad2_model_id": 10243,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "טונדרה",
+    "yad2_model_id": 11215,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "יאריס",
+    "yad2_model_id": 10247,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "יאריס GR",
+    "yad2_model_id": 13386,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "יאריס קרוס",
+    "yad2_model_id": 11228,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "לנד קרוזר",
+    "yad2_model_id": 10233,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "סופרה",
+    "yad2_model_id": 11212,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "סטארלט",
+    "yad2_model_id": 10242,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "סיינה",
+    "yad2_model_id": 10240,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "סליקה",
+    "yad2_model_id": 10224,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "סקויה",
+    "yad2_model_id": 10239,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "פור-ראנר",
+    "yad2_model_id": 10216,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "פרואייס",
+    "yad2_model_id": 13093,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "פרואייס מקס",
+    "yad2_model_id": 13836,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "פרואייס סיטי",
+    "yad2_model_id": 10237,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "פריוויה",
+    "yad2_model_id": 10235,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "פריוס",
+    "yad2_model_id": 10236,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "פריוס פלוס",
+    "yad2_model_id": 13238,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "קאמרי",
+    "yad2_model_id": 10222,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "קורולה",
+    "yad2_model_id": 10226,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "קורולה ורסו",
+    "yad2_model_id": 10227,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "קורולה קרוס",
+    "yad2_model_id": 11150,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "קראון",
+    "yad2_model_id": 11157,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "טויוטה",
+    "manufacturer_name_en": "Toyota",
+    "yad2_manufacturer_id": 19,
+    "model_name": "קרינה",
+    "yad2_model_id": 10223,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "H-1 / i800",
+    "yad2_model_id": 10268,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "H100",
+    "yad2_model_id": 10269,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "H350",
+    "yad2_model_id": 10271,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "I20 קרוס",
+    "yad2_model_id": 13435,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "I20N",
+    "yad2_model_id": 13137,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "I30N",
+    "yad2_model_id": 13138,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "I35",
+    "yad2_model_id": 13276,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "i10",
+    "yad2_model_id": 10272,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "i20",
+    "yad2_model_id": 10273,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "i30",
+    "yad2_model_id": 10276,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "i40",
+    "yad2_model_id": 10277,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "ix20",
+    "yad2_model_id": 10280,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "ix35",
+    "yad2_model_id": 10281,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "ix55",
+    "yad2_model_id": 10282,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "אטוס",
+    "yad2_model_id": 10260,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "איוניק",
+    "yad2_model_id": 10279,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "איוניק 5",
+    "yad2_model_id": 11239,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "איוניק 5 N",
+    "yad2_model_id": 13427,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "איוניק 6",
+    "yad2_model_id": 13099,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "אלנטרה",
+    "yad2_model_id": 10263,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "אלנטרה N",
+    "yad2_model_id": 13702,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "אקסנט",
+    "yad2_model_id": 10275,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "אקסנט i25",
+    "yad2_model_id": 10259,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "באיון",
+    "yad2_model_id": 11234,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "ג'נסיס",
+    "yad2_model_id": 10265,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "גאלופר",
+    "yad2_model_id": 10264,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "גטס",
+    "yad2_model_id": 10266,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "גרנדיור",
+    "yad2_model_id": 10267,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "ולוסטר",
+    "yad2_model_id": 10292,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "וניו",
+    "yad2_model_id": 10293,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "טאראקן",
+    "yad2_model_id": 10289,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "טוסון",
+    "yad2_model_id": 10291,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "טרג'ט",
+    "yad2_model_id": 10290,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "לנטרה",
+    "yad2_model_id": 10284,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "מטריקס",
+    "yad2_model_id": 10285,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "סונטה",
+    "yad2_model_id": 10288,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "סטאריה",
+    "yad2_model_id": 12925,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "סנטה פה",
+    "yad2_model_id": 10287,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "פליסייד",
+    "yad2_model_id": 10286,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "קונה",
+    "yad2_model_id": 10283,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "יונדאי",
+    "manufacturer_name_en": "Hyundai",
+    "yad2_manufacturer_id": null,
+    "model_name": "קופה",
+    "yad2_model_id": 10262,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "121",
+    "yad2_model_id": 10330,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "2",
+    "yad2_model_id": 10331,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "3",
+    "yad2_model_id": 10332,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "323",
+    "yad2_model_id": 10333,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "5",
+    "yad2_model_id": 10334,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "6",
+    "yad2_model_id": 10335,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "626",
+    "yad2_model_id": 10336,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "B-series",
+    "yad2_model_id": 10338,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "BT-50",
+    "yad2_model_id": 10339,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "CX-3",
+    "yad2_model_id": 10340,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "CX-30",
+    "yad2_model_id": 10341,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "CX-5",
+    "yad2_model_id": 10342,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "CX-50",
+    "yad2_model_id": 12966,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "CX-60",
+    "yad2_model_id": 12986,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "CX-9",
+    "yad2_model_id": 11311,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "CX-90",
+    "yad2_model_id": 13104,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "MPV",
+    "yad2_model_id": 10345,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "MX-3",
+    "yad2_model_id": 10346,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "MX-30",
+    "yad2_model_id": 11322,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "MX-5",
+    "yad2_model_id": 10347,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "דמיו",
+    "yad2_model_id": 10343,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "טריביוט",
+    "yad2_model_id": 10350,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "פרמסי",
+    "yad2_model_id": 10348,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "קסדוס 6",
+    "yad2_model_id": 10351,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "מאזדה",
+    "manufacturer_name_en": "Mazda",
+    "yad2_manufacturer_id": null,
+    "model_name": "קסדוס 9",
+    "yad2_model_id": 10352,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "200 SX",
+    "yad2_model_id": 10425,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "370Z",
+    "yad2_model_id": 10427,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "GT-R",
+    "yad2_model_id": 10432,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "NV200",
+    "yad2_model_id": 10443,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "אלטימה",
+    "yad2_model_id": 10429,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "אלמרה",
+    "yad2_model_id": 10428,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "אקס טרייל",
+    "yad2_model_id": 10457,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "אקסטרה",
+    "yad2_model_id": 11485,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "אריה",
+    "yad2_model_id": 11435,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "ארמדה",
+    "yad2_model_id": 10430,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "ג'וק",
+    "yad2_model_id": 10433,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "ווינר",
+    "yad2_model_id": 10446,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "טידה",
+    "yad2_model_id": 10455,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "טראנו",
+    "yad2_model_id": 10454,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "לארגו",
+    "yad2_model_id": 10435,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "ליף",
+    "yad2_model_id": 10436,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "מוראנו",
+    "yad2_model_id": 10439,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "מיקרה",
+    "yad2_model_id": 10438,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "מקסימה",
+    "yad2_model_id": 10437,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "נבארה",
+    "yad2_model_id": 10440,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "נוט",
+    "yad2_model_id": 10441,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "סנטרה",
+    "yad2_model_id": 10451,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "סרנה",
+    "yad2_model_id": 10452,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "פאת'פיינדר",
+    "yad2_model_id": 10444,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "פולסר",
+    "yad2_model_id": 10448,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "פטרול",
+    "yad2_model_id": 10445,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "פרימרה",
+    "yad2_model_id": 10447,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "קבסטאר",
+    "yad2_model_id": 10431,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "ניסאן",
+    "manufacturer_name_en": "Nissan",
+    "yad2_manufacturer_id": null,
+    "model_name": "קשקאי",
+    "yad2_model_id": 10449,
+    "source_file": "Pasted text(10).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "S-Cross",
+    "yad2_model_id": 13057,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "SX4",
+    "yad2_model_id": 10498,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "XL7",
+    "yad2_model_id": 10501,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "איגניס",
+    "yad2_model_id": 10492,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "אלטו",
+    "yad2_model_id": 10486,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "בלנו",
+    "yad2_model_id": 10487,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "ג'ימני",
+    "yad2_model_id": 10493,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "גרנד ויטרה",
+    "yad2_model_id": 10491,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "וואגון R+",
+    "yad2_model_id": 10500,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "ויטרה",
+    "yad2_model_id": 10499,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "ליאנה",
+    "yad2_model_id": 10494,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "סוויפט",
+    "yad2_model_id": 10497,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "סלריו",
+    "yad2_model_id": 10489,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "סמוראי",
+    "yad2_model_id": 10495,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "ספלאש",
+    "yad2_model_id": 10496,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "קארי",
+    "yad2_model_id": 10488,
+    "source_file": "Pasted text(11).txt"
+  },
+  {
+    "manufacturer_name": "סוזוקי",
+    "manufacturer_name_en": "Suzuki",
+    "yad2_manufacturer_id": null,
+    "model_name": "קרוסאובר",
+    "yad2_model_id": 10490,
+    "source_file": "Pasted text(11).txt"
+  }
+]

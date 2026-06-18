@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ':*)",
+      "Bash(pip3 --version)",
+      "Bash(pip3 install:*)",
+      "Bash(python3 -m pytest tests/ -v)",
+      "Bash(python3 -m yad2_car_bot.cli validate-config)",
+      "Bash(python3 -m yad2_car_bot.cli build-url)",
+      "Bash(python3 -m yad2_car_bot.cli parse-search-sample samples/search_result_card.html)",
+      "Bash(python3 -m yad2_car_bot.cli score-sample)",
+      "Bash(python3 -m yad2_car_bot.cli render-telegram-sample)",
+      "Bash(python3 -m pytest tests/ -v --tb=short)",
+      "Bash(python -m yad2_car_bot.cli run-once)",
+      "Bash(python3 -m yad2_car_bot.cli run-once)",
+      "Bash(python3 -m pytest tests/ -q)",
+      "Bash(DEBUG_SNAPSHOTS=true python3 -m yad2_car_bot.cli run-once)",
+      "WebSearch",
+      "Bash(python3 -m yad2_car_bot.cli run-once --send)",
+      "Bash(curl -s --max-time 5 -o /dev/null -w \"%{http_code} %{redirect_url}\" https://api.telegram.org)",
+      "Bash(python3 -c \"import requests; r = requests.get\\('https://api.telegram.org', verify=False, timeout=5\\); print\\(r.status_code, r.text[:200]\\)\")"
+    ]
+  }
+}

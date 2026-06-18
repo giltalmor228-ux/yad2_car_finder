@@ -1,0 +1,40 @@
+{
+  "engine_types": {
+    "1101": "בנזין",
+    "2101": "היברידי-בנזין"
+  },
+  "gearboxes": {
+    "102": "אוטומט",
+    "101": "ידני"
+  },
+  "owner_types": {
+    "1": "פרטי"
+  },
+  "manufacturers": {
+    "19": {
+      "name_en": "Toyota",
+      "name_he": "טויוטה",
+      "verification_status": "verified_manual"
+    },
+    "21": {
+      "name_en": "Hyundai",
+      "name_he": "יונדאי",
+      "verification_status": "verified_manual"
+    },
+    "27": {
+      "name_en": "Mazda",
+      "name_he": "מאזדה",
+      "verification_status": "verified_manual"
+    },
+    "36": {
+      "name_en": "Suzuki",
+      "name_he": "סוזוקי",
+      "verification_status": "manual_verify_once"
+    },
+    "32": {
+      "name_en": "Nissan",
+      "name_he": "ניסאן",
+      "verification_status": "manual_verify_once"
+    }
+  }
+}

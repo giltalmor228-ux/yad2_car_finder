@@ -1,0 +1,80 @@
+{
+  "profile_name": "main_used_car_search",
+  "source": "yad2",
+  "category": "vehicles/cars",
+  "cars": {
+    "Toyota": {
+      "manufacturer_id": 19,
+      "models": []
+    },
+    "Suzuki": {
+      "manufacturer_id": 36,
+      "models": []
+    },
+    "Hyundai": {
+      "manufacturer_id": 21,
+      "models": []
+    },
+    "Mazda": {
+      "manufacturer_id": 27,
+      "models": []
+    }
+  },
+  "filters": {
+    "year": {
+      "min": 2016,
+      "max": 2026
+    },
+    "price": {
+      "min": 28000,
+      "max": 55000
+    },
+    "km": {
+      "min": 5000,
+      "max": 150000
+    },
+    "engine_cc": {
+      "min": 1250,
+      "max": 3200
+    },
+    "hand": {
+      "min": 0,
+      "max": 2
+    },
+    "engine_types": [
+      {
+        "id": 1101,
+        "name": "בנזין"
+      }
+    ],
+    "gearbox": {
+      "id": 102,
+      "name": "אוטומט"
+    },
+    "owner_type": {
+      "id": 1,
+      "name": "פרטי"
+    },
+    "price_only": true,
+    "image_only": true
+  },
+  "expected_yad2_query_params": {
+    "manufacturer": "19,36,21,27",
+    "year": "2016-2026",
+    "price": "28000-55000",
+    "km": "5000-150000",
+    "engineval": "1250-3200",
+    "hand": "0-2",
+    "engineType": "1101",
+    "gearBox": "102",
+    "priceOnly": "1",
+    "imgOnly": "1",
+    "ownerID": "1"
+  },
+  "notes": [
+    "No model parameter should be used in this profile, so the search includes all models under the selected manufacturers.",
+    "Implementation-generated URLs should include year=2016-2026.",
+    "yad2_source is tracking/navigation metadata and should not be included by default.",
+    "Manufacturer ID 36 is mapped to Suzuki based on the latest manual mapping."
+  ]
+}
