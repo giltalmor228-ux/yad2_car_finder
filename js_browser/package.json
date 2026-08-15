@@ -1,0 +1,13 @@
+{
+  "name": "yad2-browser-collector",
+  "version": "1.0.0",
+  "private": true,
+  "description": "User-assisted Playwright (JS) browser collector for the Yad2 Car Finder Bot. Opens a visible Chrome window, waits for the user to complete any Radware verification manually, then returns the confirmed page HTML.",
+  "main": "fetch_page.js",
+  "scripts": {
+    "postinstall": "playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "^1.45.0"
+  }
+}

@@ -24,6 +24,18 @@ def _base_dir() -> Path:
     return Path(__file__).resolve().parent.parent.parent
 
 
+def _make_page_client(use_browser: bool, debug_mode: bool = False):
+    """Return the HTTP or user-assisted browser collector."""
+    if use_browser:
+        from yad2_car_bot.browser_client import BrowserYad2Client
+
+        return BrowserYad2Client()
+
+    from yad2_car_bot.http_client import Yad2Client
+
+    return Yad2Client(debug_mode=debug_mode)
+
+
 @click.group()
 def cli():
     """Yad2 Car Finder Bot — debug-first car monitoring pipeline."""
@@ -186,6 +198,73 @@ def render_telegram_sample(base_dir_str):
     click.secho(f"\nMessage length: {len(payload.text)} chars", fg="blue")
 
 
+@cli.command("collect")
+@click.option("--base-dir", "base_dir_str", default=None)
+@click.option(
+    "--browser/--http",
+    "use_browser",
+    default=False,
+    help="Use a visible, user-assisted Playwright browser instead of HTTP requests.",
+)
+@click.option(
+    "--out",
+    "out_path",
+    default=None,
+    type=click.Path(dir_okay=False, writable=True),
+    help="Where to write the collected HTML. Defaults to debug_snapshots/.",
+)
+def collect(base_dir_str, use_browser, out_path):
+    """Fetch the Yad2 search page and save the HTML. Does not score, store, or notify."""
+    from yad2_car_bot.config import load_config
+    from yad2_car_bot.debug.snapshots import save_snapshot
+    from yad2_car_bot.parsers.search_parser import parse_search_page
+    from yad2_car_bot.url_builder import build_search_url
+    from yad2_car_bot.validators import assert_valid_config
+
+    base = Path(base_dir_str) if base_dir_str else _base_dir()
+    cfg = load_config(base)
+    assert_valid_config(cfg)
+
+    client = _make_page_client(use_browser)
+    search_url = build_search_url(cfg.search_profile)
+
+    click.echo(f"Fetching: {search_url}")
+    if use_browser:
+        click.secho(
+            "[BROWSER] Collecting as soon as listing cards appear.",
+            fg="cyan",
+        )
+    else:
+        click.secho("[HTTP] Collecting with the polite requests client.", fg="cyan")
+
+    try:
+        html = client.get_page(search_url)
+    except RuntimeError as exc:
+        click.secho(f"Failed to fetch search page: {exc}", fg="red")
+        sys.exit(1)
+
+    from yad2_car_bot.browser_client import is_radware_verification_page
+
+    if is_radware_verification_page(html):
+        click.secho(
+            "The response is Yad2's Radware browser-verification page, not listing HTML. "
+            "Retry with: python -m yad2_car_bot.cli collect --browser",
+            fg="red",
+        )
+        sys.exit(1)
+
+    if out_path:
+        dest = Path(out_path)
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_text(html, encoding="utf-8")
+    else:
+        dest = save_snapshot(search_url, html, snapshot_dir=str(base / "debug_snapshots"))
+
+    listing_count = len(parse_search_page(html))
+    click.echo(f"Saved {len(html)} chars to {dest}")
+    click.echo(f"Recognized listing cards: {listing_count}")
+
+
 @cli.command("run-once")
 @click.option("--base-dir", "base_dir_str", default=None)
 @click.option("--dry-run/--send", default=True, help="Default: dry-run (no Telegram).")
@@ -205,7 +284,6 @@ def run_once(base_dir_str, dry_run, db, use_browser):
     from yad2_car_bot.config import load_config
     from yad2_car_bot.validators import assert_valid_config
     from yad2_car_bot.url_builder import build_search_url
-    from yad2_car_bot.http_client import Yad2Client
     from yad2_car_bot.parsers.search_parser import parse_search_page, parse_next_data
     from yad2_car_bot.models import DetailListing
     from yad2_car_bot.scoring.keyword_matcher import match_keywords
@@ -227,18 +305,13 @@ def run_once(base_dir_str, dry_run, db, use_browser):
         click.secho("ERROR: TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must be set for --send mode.", fg="red")
         sys.exit(1)
 
-    if use_browser:
-        from yad2_car_bot.browser_client import BrowserYad2Client
-
-        client = BrowserYad2Client()
-    else:
-        client = Yad2Client(debug_mode=debug_mode)
+    client = _make_page_client(use_browser, debug_mode=debug_mode)
     search_url = build_search_url(cfg.search_profile)
 
     click.echo(f"Fetching: {search_url}")
     if use_browser:
         click.secho(
-            "[BROWSER] Verification, if requested, must be completed manually.",
+            "[BROWSER] Collecting as soon as listing cards appear.",
             fg="cyan",
         )
     if dry_run:
