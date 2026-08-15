@@ -24,8 +24,12 @@ _NEXT_DATA_RE = re.compile(
 
 
 def _canonicalize_url(listing_type: str, listing_id: str) -> str:
-    """Build the canonical detail page URL from listing type and ID."""
-    return f"{_BASE_URL}/vehicles/{listing_type}/item/{listing_id}"
+    """Build the canonical detail page URL from listing type and ID.
+
+    Yad2 serves detail pages at ``/vehicles/item/{id}``. Types like
+    ``private-vehicle-no-footer`` are feed-only and produce broken links.
+    """
+    return f"{_BASE_URL}/vehicles/item/{listing_id}"
 
 
 def parse_search_page(html: str) -> list[SearchCardListing]:
@@ -71,9 +75,19 @@ def parse_next_data(html: str) -> dict[str, dict]:
     try:
         data = json.loads(m.group(1))
         queries = data["props"]["pageProps"]["dehydratedState"]["queries"]
-        listings: list[dict] = queries[0]["state"]["data"].get("private", [])
+        payload = queries[0]["state"]["data"]
     except (KeyError, IndexError, ValueError, TypeError):
         return {}
+
+    # Search feed may split ads across private / commercial / platinum / solo.
+    listings: list[dict] = []
+    if isinstance(payload, dict):
+        for key in ("private", "commercial", "platinum", "solo", "boost"):
+            bucket = payload.get(key) or []
+            if isinstance(bucket, list):
+                listings.extend(bucket)
+    elif isinstance(payload, list):
+        listings = payload
 
     result: dict[str, dict] = {}
     for item in listings:
@@ -81,18 +95,15 @@ def parse_next_data(html: str) -> dict[str, dict]:
         if not token:
             continue
 
-        # Images
         meta = item.get("metaData") or {}
         cover: str | None = meta.get("coverImage")
         img_list: list[str] = meta.get("images") or ([cover] if cover else [])
         images = [ListingImage(url=url, index=i) for i, url in enumerate(img_list) if url]
 
-        # Engine
         engine_type: str | None = (item.get("engineType") or {}).get("text")
         engine_vol = item.get("engineVolume")
         engine_cc: str | None = str(engine_vol) if engine_vol else None
 
-        # Location (area-level)
         location: str | None = (
             (item.get("address") or {}).get("area", {}) or {}
         ).get("text")
@@ -117,7 +128,6 @@ def _parse_card(card) -> SearchCardListing | None:
     """Extract a single SearchCardListing from a BS4 Tag."""
     href = card.get("href", "")
 
-    # listing_id: prefer data-testid, fall back to href
     listing_id = card.get("data-testid", "")
     if not listing_id:
         m = _ITEM_ID_RE.search(href)
@@ -130,7 +140,6 @@ def _parse_card(card) -> SearchCardListing | None:
     listing_type = card.get("data-listing-type", "")
     listing_url = _canonicalize_url(listing_type, listing_id)
 
-    # Title and subtitle from h2[data-nagish="feed-item-section-title"]
     title: str | None = None
     subtitle: str | None = None
     h2 = card.find("h2", attrs={"data-nagish": "feed-item-section-title"})
@@ -141,7 +150,6 @@ def _parse_card(card) -> SearchCardListing | None:
         if len(spans) > 1:
             subtitle = safe_text(spans[1])
 
-    # Year and hand: look for the "2016 • יד 1" pattern in any span text
     year: int | None = None
     hand: int | None = None
     for span in card.find_all("span"):
@@ -152,22 +160,18 @@ def _parse_card(card) -> SearchCardListing | None:
             hand = int(m.group(2))
             break
 
-    # Price
     price_tag = card.find("span", attrs={"data-testid": "price"})
     price = safe_text(price_tag)
 
-    # Image
     img_tag = card.find("img", attrs={"data-testid": "image"})
     image_url = img_tag.get("src") if img_tag else None
 
-    # Tags / flags
     tags = [
         t.get_text(strip=True)
         for t in card.find_all("span", attrs={"data-testid": "listing-item-flag"})
         if t.get_text(strip=True)
     ]
 
-    # Content hash
     raw_card_html_hash = hashlib.md5(str(card).encode("utf-8")).hexdigest()
 
     return SearchCardListing(

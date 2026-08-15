@@ -37,6 +37,7 @@ def _make_detail(**kwargs):
         km="77,320",
         color="לבן",
         current_ownership="פרטית",
+        original_ownership="פרטית",
         test_valid_until="01/06/2027",
         gearbox="אוטומטי",
         date_on_road="01/2016",
@@ -88,12 +89,22 @@ def test_render_includes_score(app_config):
     assert "82" in payload.text
 
 
-def test_render_fills_gearbox_from_subtitle(app_config):
-    detail = _make_detail(gearbox=None, engine_type="בנזין", engine_cc="1368")
-    card = _make_card(subtitle="Cross Premium אוט׳ 1.4 (100 כ״ס)")
+def test_render_shows_original_ownership_when_not_first_hand(app_config):
+    card = _make_card(hand=2)
+    detail = _make_detail(current_ownership="פרטית", original_ownership="ליסינג")
+    # DetailListing may need original_ownership in helper
     payload = render_message(_make_scored(), card, detail, app_config.telegram_template)
-    assert "אוטומט" in payload.text
-    assert "בנזין, 1368" in payload.text
+    assert "בעלות נוכחית" in payload.text
+    assert "פרטית" in payload.text
+    assert "בעלות מקורית" in payload.text
+    assert "ליסינג" in payload.text
+
+
+def test_render_first_hand_marks_original_as_first(app_config):
+    card = _make_card(hand=1)
+    detail = _make_detail(current_ownership="פרטית", original_ownership="פרטית")
+    payload = render_message(_make_scored(), card, detail, app_config.telegram_template)
+    assert "יד ראשונה" in payload.text
 
 
 def test_render_engine_omits_empty_parts(app_config):

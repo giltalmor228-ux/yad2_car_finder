@@ -28,11 +28,17 @@ const LISTING_SELECTORS = [
   'a[href*="/vehicles/"][href*="item/"]',
 ];
 
+const DETAIL_READY_SELECTORS = [
+  'script#__NEXT_DATA__',
+  'section[data-testid="additional-info"]',
+  'p[data-testid="vehicle-description"]',
+];
+
 function parseArgs(argv) {
   const rest = argv.slice(2);
   if (rest.length === 0 || rest[0].startsWith('--')) {
     throw new Error(
-      'Usage: node fetch_page.js <url> [--referer <referer>] [--channel <channel>] [--timeout-ms <ms>] [--cdp-url <url>] [--reuse-tab] [--html-out <path>]'
+      'Usage: node fetch_page.js <url> [--referer <referer>] [--channel <channel>] [--timeout-ms <ms>] [--cdp-url <url>] [--reuse-tab] [--html-out <path>] [--page-kind search|detail]'
     );
   }
 
@@ -44,6 +50,7 @@ function parseArgs(argv) {
     cdpUrl: null,
     reuseTab: false,
     htmlOut: null,
+    pageKind: 'search',
   };
 
   for (let i = 1; i < rest.length; i += 1) {
@@ -66,6 +73,9 @@ function parseArgs(argv) {
     } else if (flag === '--html-out') {
       args.htmlOut = value;
       i += 1;
+    } else if (flag === '--page-kind') {
+      args.pageKind = value;
+      i += 1;
     } else {
       throw new Error(`Unknown argument: ${flag}`);
     }
@@ -87,17 +97,32 @@ async function pickExistingPage(browser) {
   for (const context of browser.contexts()) {
     pages.push(...context.pages());
   }
-  for (const page of pages) {
+
+  const usable = pages.filter((page) => {
+    const url = page.url() || '';
+    return (
+      url.startsWith('http://') ||
+      url.startsWith('https://') ||
+      url === 'about:blank'
+    );
+  });
+
+  for (const page of usable) {
     if (page.url().includes('/vehicles/cars') && (await listingCount(page)) > 0) {
       return page;
     }
   }
-  for (const page of pages) {
+  for (const page of usable) {
+    if (page.url().includes('yad2.co.il')) {
+      return page;
+    }
+  }
+  for (const page of usable) {
     if (page.url().includes('/vehicles/cars')) {
       return page;
     }
   }
-  return pages[0] || null;
+  return usable[0] || pages[0] || null;
 }
 
 async function waitForListings(page, timeoutMs) {
@@ -121,10 +146,42 @@ async function waitForListings(page, timeoutMs) {
   }
 }
 
+async function waitForDetail(page, timeoutMs) {
+  const started = Date.now();
+  const heartbeat = setInterval(() => {
+    process.stderr.write(`Still waiting for detail... ${page.url()}\n`);
+  }, 5000);
+
+  try {
+    await page.waitForFunction(
+      (selectors) => {
+        if (selectors.some((selector) => document.querySelector(selector))) {
+          const script = document.querySelector('script#__NEXT_DATA__');
+          if (!script || !script.textContent) return true;
+          // Prefer pages that already hydrated listing JSON with km.
+          return script.textContent.includes('"km"') || script.textContent.includes('additional-info');
+        }
+        return false;
+      },
+      DETAIL_READY_SELECTORS,
+      { timeout: timeoutMs }
+    );
+  } catch (_err) {
+    process.stderr.write(
+      `Timed out after ${Math.round((Date.now() - started) / 1000)}s waiting for detail content on ${page.url()}\n`
+    );
+  } finally {
+    clearInterval(heartbeat);
+  }
+}
+
 async function main() {
-  const { url, referer, channel, timeoutMs, cdpUrl, reuseTab, htmlOut } = parseArgs(process.argv);
+  const { url, referer, channel, timeoutMs, cdpUrl, reuseTab, htmlOut, pageKind } = parseArgs(process.argv);
   if (!htmlOut) {
     throw new Error('--html-out <path> is required');
+  }
+  if (pageKind !== 'search' && pageKind !== 'detail') {
+    throw new Error(`Unknown --page-kind: ${pageKind}`);
   }
 
   let browser;
@@ -142,7 +199,7 @@ async function main() {
     }
 
     const alreadyHasListings = page ? (await listingCount(page)) > 0 && page.url().includes('/vehicles/cars') : false;
-    const shouldNavigate = !(reuseTab && alreadyHasListings);
+    const shouldNavigate = !(reuseTab && alreadyHasListings && pageKind === 'search');
 
     if (!page) {
       const context =
@@ -158,7 +215,7 @@ async function main() {
     }
 
     if (shouldNavigate) {
-      process.stderr.write(`Navigating this tab to the search URL...\n`);
+      process.stderr.write(`Navigating this tab to the ${pageKind} URL...\n`);
       const gotoOptions = { waitUntil: 'domcontentloaded', timeout: timeoutMs };
       if (referer) {
         gotoOptions.referer = referer;
@@ -170,16 +227,25 @@ async function main() {
       process.stderr.write('Search listings already visible; skipping navigation.\n');
     }
 
-    process.stderr.write('Waiting for listing cards to appear...\n');
-    await waitForListings(page, timeoutMs);
+    if (pageKind === 'detail') {
+      process.stderr.write('Waiting for detail content to appear...\n');
+      await waitForDetail(page, timeoutMs);
+    } else {
+      process.stderr.write('Waiting for listing cards to appear...\n');
+      await waitForListings(page, timeoutMs);
+    }
 
     const html = await page.content();
     const title = await page.title();
-    const count = await listingCount(page);
-    process.stderr.write(`Found ${count} listing card(s) on ${page.url()}\n`);
+    const count = pageKind === 'detail' ? 0 : await listingCount(page);
+    if (pageKind === 'detail') {
+      process.stderr.write(`Captured detail page on ${page.url()}\n`);
+    } else {
+      process.stderr.write(`Found ${count} listing card(s) on ${page.url()}\n`);
+    }
 
     fs.writeFileSync(htmlOut, html, 'utf8');
-    process.stdout.write(`${JSON.stringify({ title, listingCount: count, htmlPath: htmlOut })}\n`);
+    process.stdout.write(`${JSON.stringify({ title, listingCount: count, htmlPath: htmlOut, pageKind })}\n`);
   } finally {
     // For connectOverCDP, close() disconnects without quitting the user's Chrome.
     // Leaving the connection open keeps the Node process alive indefinitely.

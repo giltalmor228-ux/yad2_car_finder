@@ -21,6 +21,8 @@ logger = logging.getLogger("yad2_car_bot.cli")
 
 # Polite pause between search-group fetches in the same Chrome session.
 _GROUP_PAUSE_SECONDS = 3
+# Pause between detail-page fetches (km / test / ownership).
+_DETAIL_PAUSE_SECONDS = 1
 # Default watch interval (minutes) between full search refreshes.
 _DEFAULT_WATCH_INTERVAL_MINUTES = 15
 
@@ -322,6 +324,7 @@ def _run_pipeline(
       - ``none``: store/score only; never send Telegram (baseline / seed run)
     """
     from yad2_car_bot.models import DetailListing
+    from yad2_car_bot.parsers.detail_parser import enrich_detail_from_html
     from yad2_car_bot.parsers.search_parser import (
         _gearbox_from_text,
         parse_next_data,
@@ -342,6 +345,7 @@ def _run_pipeline(
     new_count = 0
     notify_count = 0
     seen_listing_ids: set[str] = set()
+    detail_fetches = 0
 
     for index, search_url in enumerate(search_urls, start=1):
         if index > 1:
@@ -390,6 +394,28 @@ def _run_pipeline(
                 parsed_at=datetime.now(tz=timezone.utc),
                 parser_provenance="search_json_enrichment",
             )
+
+            # Detail pages hold km / test / ownership. Fetch when we may notify.
+            should_fetch_detail = notify_mode != "none" and (
+                is_new or notify_mode == "standard"
+            )
+            if should_fetch_detail:
+                if detail_fetches:
+                    time.sleep(_DETAIL_PAUSE_SECONDS)
+                click.echo(f"  detail: {card.listing_url}")
+                try:
+                    detail_html = client.get_page(
+                        card.listing_url,
+                        require_listings=False,
+                        page_kind="detail",
+                    )
+                    detail = enrich_detail_from_html(detail_html, base=detail)
+                    detail_fetches += 1
+                except RuntimeError as exc:
+                    click.secho(
+                        f"  detail fetch failed for {card.listing_id}: {exc}",
+                        fg="yellow",
+                    )
 
             matches = match_keywords(detail.description, card.tags, cfg.keyword_rules)
             scored = score_listing(card, detail, matches, cfg.scoring_rules)

@@ -1,4 +1,6 @@
 """Tests for parsers/detail_parser.py — uses real HTML fixtures."""
+import json
+
 import pytest
 
 from yad2_car_bot.parsers.detail_parser import (
@@ -73,6 +75,99 @@ def test_engine_cc_extracted(technical_html):
 def test_fuel_consumption_extracted(technical_html):
     result = parse_technical_section(technical_html)
     assert result.get("combined_fuel_consumption") is not None
+
+
+def test_parse_detail_next_data_extracts_km():
+    from yad2_car_bot.parsers.detail_parser import parse_detail_next_data
+
+    html = (
+        '<script id="__NEXT_DATA__" type="application/json">'
+        + json.dumps(
+            {
+                "props": {
+                    "pageProps": {
+                        "dehydratedState": {
+                            "queries": [
+                                {
+                                    "state": {
+                                        "data": {
+                                            "token": "abc",
+                                            "km": 113000,
+                                            "engineType": {"text": "בנזין"},
+                                            "engineVolume": 1591,
+                                            "gearBox": {"text": "אוטומטי"},
+                                            "owner": {"text": "פרטית"},
+                                            "originalOwner": {"text": "ליסינג"},
+                                            "address": {
+                                                "area": {"text": "אזור חיפה"},
+                                                "city": {"text": "חיפה"},
+                                            },
+                                            "vehicleDates": {
+                                                "testDate": "2027-07-01T00:00:00"
+                                            },
+                                            "metaData": {
+                                                "coverImage": "https://img.yad2.co.il/a.jpeg",
+                                                "images": [],
+                                            },
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        )
+        + "</script>"
+    )
+    data = parse_detail_next_data(html)
+    assert data["km"] == "113,000"
+    assert data["engine_type"] == "בנזין"
+    assert data["engine_cc"] == "1591"
+    assert data["gearbox"] == "אוטומטי"
+    assert data["current_ownership"] == "פרטית"
+    assert data["original_ownership"] == "ליסינג"
+    assert data["location"] == "אזור חיפה"
+    assert data["test_valid_until"] == "01/07/2027"
+
+
+def test_enrich_detail_from_html_prefers_next_data_km():
+    from yad2_car_bot.parsers.detail_parser import enrich_detail_from_html
+
+    html = (
+        '<script id="__NEXT_DATA__" type="application/json">'
+        + json.dumps(
+            {
+                "props": {
+                    "pageProps": {
+                        "dehydratedState": {
+                            "queries": [
+                                {
+                                    "state": {
+                                        "data": {
+                                            "km": 50000,
+                                            "owner": {"text": "פרטית"},
+                                            "engineType": {"text": "בנזין"},
+                                            "engineVolume": 1400,
+                                            "address": {"area": {"text": "ת״א"}},
+                                            "vehicleDates": {},
+                                            "metaData": {},
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        )
+        + "</script>"
+    )
+    detail = enrich_detail_from_html(html)
+    assert detail.km == "50,000"
+    assert detail.current_ownership == "פרטית"
+    assert detail.engine_type == "בנזין"
+    assert detail.location == "ת״א"
 
 
 def test_location_extracted(description_html):

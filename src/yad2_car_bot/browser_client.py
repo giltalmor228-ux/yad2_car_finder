@@ -49,7 +49,12 @@ class BrowserYad2Client:
         self.reuse_tab = os.getenv("PLAYWRIGHT_REUSE_TAB", "false").lower() == "true"
 
     def get_page(
-        self, url: str, referer: str | None = None, *, require_listings: bool = True
+        self,
+        url: str,
+        referer: str | None = None,
+        *,
+        require_listings: bool = True,
+        page_kind: str = "search",
     ) -> str:
         node_bin = shutil.which(self.node_executable)
         if not node_bin:
@@ -86,12 +91,17 @@ class BrowserYad2Client:
             cmd += ["--cdp-url", self.cdp_url]
         if self.reuse_tab:
             cmd += ["--reuse-tab"]
+        if page_kind != "search":
+            cmd += ["--page-kind", page_kind]
 
         if self.cdp_url:
             print(f"\nAttaching to an already-open Chrome at {self.cdp_url}.")
         else:
             print("\nA visible browser window will open (Node.js/Playwright).")
-        print("Collecting as soon as listing cards appear.")
+        if page_kind == "detail":
+            print("Collecting detail page content.")
+        else:
+            print("Collecting as soon as listing cards appear.")
 
         try:
             result = subprocess.run(
@@ -138,7 +148,7 @@ class BrowserYad2Client:
                     "and confirm only after Yad2 listings are visible."
                 )
 
-            if listing_count == 0 and require_listings:
+            if listing_count == 0 and require_listings and page_kind == "search":
                 raise RuntimeError(
                     "The confirmed browser page contained no recognizable listing cards. "
                     "The Yad2 markup may have changed, or the search may be empty."

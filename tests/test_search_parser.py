@@ -83,10 +83,16 @@ def test_canonicalize_no_tracking_params():
     assert "pagination" not in url
 
 
+def test_canonicalize_uses_vehicles_item_path():
+    url = _canonicalize_url("private-vehicle-no-footer", "abc123")
+    assert url == "https://www.yad2.co.il/vehicles/item/abc123"
+    assert "no-footer" not in url
+
+
 def test_canonicalize_contains_item_id():
     url = _canonicalize_url("private-vehicle", "xsstyghm")
     assert "xsstyghm" in url
-    assert "private-vehicle" in url
+    assert url.endswith("/vehicles/item/xsstyghm")
 
 
 def test_canonical_url_is_absolute(search_card_html):

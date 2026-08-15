@@ -72,6 +72,25 @@ def _format_engine(engine_type: Optional[str], engine_cc: Optional[str]) -> str:
     return ", ".join(parts) if parts else "—"
 
 
+def _format_ownership_lines(
+    hand: Optional[int],
+    current: Optional[str],
+    original: Optional[str],
+) -> tuple[str, str]:
+    """Return (current_ownership display, original_ownership display).
+
+    Yad2 exposes current owner + original owner only (not every intermediate hand).
+    For first-hand cars, original is omitted in the message via "— / לא רלוונטי".
+    """
+    current_disp = _display(current)
+    if hand is None:
+        return current_disp, _display(original)
+    if hand <= 1:
+        # First hand: original is the same idea as current.
+        return current_disp, "יד ראשונה"
+    return current_disp, _display(original)
+
+
 def render_message(
     scored: ScoredListing,
     card: SearchCardListing,
@@ -85,6 +104,9 @@ def render_message(
 
     gearbox = detail.gearbox or _gearbox_from_text(card.subtitle)
     engine = _format_engine(detail.engine_type, detail.engine_cc)
+    current_own, original_own = _format_ownership_lines(
+        card.hand, detail.current_ownership, detail.original_ownership
+    )
 
     def build_text(positive_list, flags_list, include_subtitle=True) -> str:
         subtitle = card.subtitle if include_subtitle else ""
@@ -102,7 +124,8 @@ def render_message(
             engine_cc=detail.engine_cc or "—",
             engine=engine,
             location=_display(detail.location),
-            current_ownership=_display(detail.current_ownership),
+            current_ownership=current_own,
+            original_ownership=original_own,
             test_valid_until=_display(detail.test_valid_until),
             score=scored.score,
             positive_reasons=pos,

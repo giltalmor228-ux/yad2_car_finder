@@ -25,7 +25,8 @@ Store only `phone_available: true/false`.
 ⚙️ גיר: {gearbox}
 ⛽ מנוע: {engine}
 📍 מיקום: {location}
-👤 בעלות: {current_ownership}
+👤 בעלות נוכחית: {current_ownership}
+📜 בעלות מקורית: {original_ownership}
 🧪 טסט עד: {test_valid_until}
 
 ⭐ ציון התאמה: {score}/100

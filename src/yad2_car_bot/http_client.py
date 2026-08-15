@@ -65,13 +65,20 @@ class Yad2Client:
             {"User-Agent": user_agent or _DEFAULT_USER_AGENT}
         )
 
-    def get_page(self, url: str, referer: Optional[str] = None) -> str:
+    def get_page(
+        self,
+        url: str,
+        referer: Optional[str] = None,
+        **_kwargs,
+    ) -> str:
         """Fetch a public URL and return HTML text.
 
         Retries up to *max_retries* times with exponential backoff + jitter.
         Honors Retry-After on 429/503.
         Pass *referer* to set the Referer header (e.g. the search page URL when
         fetching a detail page).
+        Extra kwargs (``require_listings``, ``page_kind``) are accepted for
+        API compatibility with the browser client and ignored here.
         """
         last_exc: Optional[Exception] = None
         extra_headers = {"Referer": referer} if referer else {}

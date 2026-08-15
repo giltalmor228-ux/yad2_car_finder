@@ -92,6 +92,7 @@ class DetailListing(BaseModel):
     km: Optional[str] = None
     color: Optional[str] = None
     current_ownership: Optional[str] = None
+    original_ownership: Optional[str] = None
     test_valid_until: Optional[str] = None
     gearbox: Optional[str] = None
     date_on_road: Optional[str] = None
