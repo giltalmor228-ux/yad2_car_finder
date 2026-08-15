@@ -11,15 +11,15 @@
  *
  * Usage:
  *   node fetch_page.js <url> [--referer <referer>] [--channel <channel>]
- *     [--timeout-ms <ms>] [--cdp-url <url>] [--reuse-tab]
+ *     [--timeout-ms <ms>] [--cdp-url <url>] [--reuse-tab] [--html-out <path>]
  *
  * On success, prints a single JSON line to stdout:
- *   {"html": "...", "title": "...", "listingCount": N}
- *
- * All status/prompt output is written to stderr so stdout only ever
- * contains the final JSON result.
+ *   {"title": "...", "listingCount": N, "htmlPath": "..."}
+ * The page HTML is written to --html-out (required for large Yad2 pages so the
+ * stdout pipe does not fill and hang).
  */
 
+const fs = require('fs');
 const { chromium } = require('playwright');
 
 const LISTING_SELECTORS = [
@@ -32,7 +32,7 @@ function parseArgs(argv) {
   const rest = argv.slice(2);
   if (rest.length === 0 || rest[0].startsWith('--')) {
     throw new Error(
-      'Usage: node fetch_page.js <url> [--referer <referer>] [--channel <channel>] [--timeout-ms <ms>] [--cdp-url <url>] [--reuse-tab]'
+      'Usage: node fetch_page.js <url> [--referer <referer>] [--channel <channel>] [--timeout-ms <ms>] [--cdp-url <url>] [--reuse-tab] [--html-out <path>]'
     );
   }
 
@@ -43,6 +43,7 @@ function parseArgs(argv) {
     timeoutMs: 60000,
     cdpUrl: null,
     reuseTab: false,
+    htmlOut: null,
   };
 
   for (let i = 1; i < rest.length; i += 1) {
@@ -62,6 +63,9 @@ function parseArgs(argv) {
       i += 1;
     } else if (flag === '--reuse-tab') {
       args.reuseTab = true;
+    } else if (flag === '--html-out') {
+      args.htmlOut = value;
+      i += 1;
     } else {
       throw new Error(`Unknown argument: ${flag}`);
     }
@@ -118,18 +122,18 @@ async function waitForListings(page, timeoutMs) {
 }
 
 async function main() {
-  const { url, referer, channel, timeoutMs, cdpUrl, reuseTab } = parseArgs(process.argv);
+  const { url, referer, channel, timeoutMs, cdpUrl, reuseTab, htmlOut } = parseArgs(process.argv);
+  if (!htmlOut) {
+    throw new Error('--html-out <path> is required');
+  }
 
   let browser;
-  let launched = false;
-  let createdPage = false;
   let page;
 
   if (cdpUrl) {
     browser = await chromium.connectOverCDP(cdpUrl);
   } else {
     browser = await chromium.launch({ channel, headless: false });
-    launched = true;
   }
 
   try {
@@ -144,7 +148,6 @@ async function main() {
       const context =
         browser.contexts()[0] || (await browser.newContext({ locale: 'he-IL' }));
       page = await context.newPage();
-      createdPage = true;
     }
 
     if (cdpUrl) {
@@ -175,13 +178,12 @@ async function main() {
     const count = await listingCount(page);
     process.stderr.write(`Found ${count} listing card(s) on ${page.url()}\n`);
 
-    process.stdout.write(`${JSON.stringify({ html, title, listingCount: count })}\n`);
+    fs.writeFileSync(htmlOut, html, 'utf8');
+    process.stdout.write(`${JSON.stringify({ title, listingCount: count, htmlPath: htmlOut })}\n`);
   } finally {
-    if (launched) {
-      await browser.close();
-    } else if (createdPage && page) {
-      await page.close();
-    }
+    // For connectOverCDP, close() disconnects without quitting the user's Chrome.
+    // Leaving the connection open keeps the Node process alive indefinitely.
+    await browser.close();
   }
 }
 

@@ -3,6 +3,8 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+from yad2_car_bot.url_builder import MAX_MANUFACTURERS_PER_GROUP, MAX_MODELS_PER_GROUP
+
 if TYPE_CHECKING:
     from yad2_car_bot.config import AppConfig
 
@@ -64,6 +66,92 @@ def validate_config(config: "AppConfig") -> list[tuple[str, str]]:
                     f"'manual_verify_once'. Verify this ID manually before relying on it.",
                 )
             )
+
+    issues.extend(_validate_search_groups(config))
+    return issues
+
+
+def _validate_search_groups(config: "AppConfig") -> list[tuple[str, str]]:
+    """Validate ``search_groups``: ≤4 manufacturers and ≤4 models per group."""
+    issues: list[tuple[str, str]] = []
+    groups = config.search_profile.search_groups
+    if not groups:
+        return issues
+
+    known_mfr_ids = {
+        entry.manufacturer_id
+        for entry in config.search_profile.cars.values()
+        if entry.manufacturer_id is not None
+    }
+    # Also accept IDs documented in filter metadata.
+    known_mfr_ids.update(int(str_id) for str_id in config.filter_metadata.get("manufacturers", {}))
+
+    catalog_ids = {
+        int(row["yad2_model_id"])
+        for row in config.model_catalog
+        if row.get("yad2_model_id") is not None
+    }
+
+    seen_models_across: dict[int, int] = {}
+    for group_index, group in enumerate(groups, start=1):
+        if not group.manufacturers:
+            issues.append(
+                (
+                    ERROR,
+                    f"search_groups[{group_index}].manufacturers is empty. "
+                    f"Add 1–{MAX_MANUFACTURERS_PER_GROUP} manufacturer IDs.",
+                )
+            )
+        elif len(group.manufacturers) > MAX_MANUFACTURERS_PER_GROUP:
+            issues.append(
+                (
+                    ERROR,
+                    f"search_groups[{group_index}] has {len(group.manufacturers)} "
+                    f"manufacturers; Yad2 allows at most {MAX_MANUFACTURERS_PER_GROUP} "
+                    "per search.",
+                )
+            )
+
+        for mfr_id in group.manufacturers:
+            if mfr_id not in known_mfr_ids:
+                issues.append(
+                    (
+                        ERROR,
+                        f"search_groups[{group_index}] references unknown manufacturer "
+                        f"ID {mfr_id}.",
+                    )
+                )
+
+        if len(group.models) > MAX_MODELS_PER_GROUP:
+            issues.append(
+                (
+                    ERROR,
+                    f"search_groups[{group_index}] has {len(group.models)} model IDs; "
+                    f"Yad2 allows at most {MAX_MODELS_PER_GROUP} models total per "
+                    "search group.",
+                )
+            )
+
+        for model_id in group.models:
+            if model_id not in catalog_ids:
+                issues.append(
+                    (
+                        ERROR,
+                        f"search_groups[{group_index}] contains unknown model ID "
+                        f"{model_id} (not found in data/yad2_car_models_flat.json).",
+                    )
+                )
+            if model_id in seen_models_across:
+                issues.append(
+                    (
+                        WARNING,
+                        f"Model ID {model_id} appears in both "
+                        f"search_groups[{seen_models_across[model_id]}] and "
+                        f"search_groups[{group_index}].",
+                    )
+                )
+            else:
+                seen_models_across[model_id] = group_index
 
     return issues
 

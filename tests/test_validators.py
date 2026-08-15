@@ -1,6 +1,7 @@
 """Tests for validators.py"""
-import pytest
-from yad2_car_bot.config import load_config
+from copy import deepcopy
+
+from yad2_car_bot.models import SearchGroup
 from yad2_car_bot.validators import validate_config, ERROR, WARNING
 
 
@@ -19,11 +20,9 @@ def test_manual_verify_once_generates_warning(app_config):
 
 
 def test_duplicate_manufacturer_id_fails(app_config):
-    from copy import deepcopy
     from yad2_car_bot.models import ManufacturerEntry
 
     cfg = deepcopy(app_config)
-    # Make Hyundai use same ID as Toyota (19)
     cfg.search_profile.cars["Hyundai"] = ManufacturerEntry(manufacturer_id=19, models=[])
     issues = validate_config(cfg)
     errors = [msg for sev, msg in issues if sev == ERROR]
@@ -31,15 +30,73 @@ def test_duplicate_manufacturer_id_fails(app_config):
 
 
 def test_missing_manufacturer_id_fails(app_config):
-    from copy import deepcopy
     from yad2_car_bot.models import ManufacturerEntry
 
     cfg = deepcopy(app_config)
-    # manufacturer_id is required in ManufacturerEntry, use a sentinel None via raw dict
-    # We patch the profile's cars dict directly
     cfg.search_profile.cars["TestBrand"] = ManufacturerEntry(manufacturer_id=0, models=[])
-    # Set manufacturer_id to None via object mutation
     cfg.search_profile.cars["TestBrand"].manufacturer_id = None  # type: ignore
     issues = validate_config(cfg)
     errors = [msg for sev, msg in issues if sev == ERROR]
     assert any("TestBrand" in e for e in errors), f"Expected missing ID error. Got: {errors}"
+
+
+def test_search_group_too_many_manufacturers_fails(app_config):
+    cfg = deepcopy(app_config)
+    cfg.search_profile.search_groups = [
+        SearchGroup(manufacturers=[19, 21, 27, 36, 32], models=[10247])
+    ]
+    issues = validate_config(cfg)
+    errors = [msg for sev, msg in issues if sev == ERROR]
+    assert any("manufacturers" in e and "at most 4" in e for e in errors), (
+        f"Expected manufacturer cap error. Got: {errors}"
+    )
+
+
+def test_search_group_too_many_models_fails(app_config):
+    cfg = deepcopy(app_config)
+    cfg.search_profile.search_groups = [
+        SearchGroup(
+            manufacturers=[19],
+            models=[10247, 10226, 10238, 10225, 10218],
+        )
+    ]
+    issues = validate_config(cfg)
+    errors = [msg for sev, msg in issues if sev == ERROR]
+    assert any("model" in e and "at most 4" in e for e in errors), (
+        f"Expected model cap error. Got: {errors}"
+    )
+
+
+def test_search_group_empty_manufacturers_fails(app_config):
+    cfg = deepcopy(app_config)
+    cfg.search_profile.search_groups = [SearchGroup(manufacturers=[], models=[10247])]
+    issues = validate_config(cfg)
+    errors = [msg for sev, msg in issues if sev == ERROR]
+    assert any("manufacturers is empty" in e for e in errors), (
+        f"Expected empty manufacturers error. Got: {errors}"
+    )
+
+
+def test_unknown_model_id_fails(app_config):
+    cfg = deepcopy(app_config)
+    cfg.search_profile.search_groups = [
+        SearchGroup(manufacturers=[19], models=[99999999])
+    ]
+    issues = validate_config(cfg)
+    errors = [msg for sev, msg in issues if sev == ERROR]
+    assert any("99999999" in e and "unknown" in e for e in errors), (
+        f"Expected unknown model ID error. Got: {errors}"
+    )
+
+
+def test_duplicate_model_id_across_groups_warns(app_config):
+    cfg = deepcopy(app_config)
+    cfg.search_profile.search_groups = [
+        SearchGroup(manufacturers=[19], models=[10247, 10226]),
+        SearchGroup(manufacturers=[19], models=[10247, 10238]),
+    ]
+    issues = validate_config(cfg)
+    warnings = [msg for sev, msg in issues if sev == WARNING]
+    assert any("10247" in w and "appears in both" in w for w in warnings), (
+        f"Expected duplicate-model warning. Got: {warnings}"
+    )

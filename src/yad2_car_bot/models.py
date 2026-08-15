@@ -36,12 +36,20 @@ class SearchFilters(BaseModel):
     image_only: bool = False
 
 
+class SearchGroup(BaseModel):
+    """One Yad2 search request: up to 4 manufacturers and up to 4 models total."""
+
+    manufacturers: list[int]
+    models: list[int] = []
+
+
 class SearchProfile(BaseModel):
     profile_name: str
     source: str
     category: str
     cars: dict[str, ManufacturerEntry]
     filters: SearchFilters
+    search_groups: list[SearchGroup] = []
     expected_yad2_query_params: dict[str, str] = {}
     notes: list[str] = []
 

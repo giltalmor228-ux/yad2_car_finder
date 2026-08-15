@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -17,6 +18,9 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(name)s — %(message)s",
 )
 logger = logging.getLogger("yad2_car_bot.cli")
+
+# Polite pause between search-group fetches in the same Chrome session.
+_GROUP_PAUSE_SECONDS = 3
 
 
 def _base_dir() -> Path:
@@ -34,6 +38,20 @@ def _make_page_client(use_browser: bool, debug_mode: bool = False):
     from yad2_car_bot.http_client import Yad2Client
 
     return Yad2Client(debug_mode=debug_mode)
+
+
+def _out_path_for_group(out_path: str | None, group_index: int) -> Path | None:
+    """Return the output path for search group *group_index* (1-based).
+
+    Group 1 keeps the original name; later groups get a ``-2``, ``-3``, … suffix
+    before the file extension (e.g. ``search.html`` → ``search-2.html``).
+    """
+    if not out_path:
+        return None
+    path = Path(out_path)
+    if group_index == 1:
+        return path
+    return path.with_name(f"{path.stem}-{group_index}{path.suffix}")
 
 
 @click.group()
@@ -70,14 +88,17 @@ def validate_config(base_dir_str):
 @cli.command("build-url")
 @click.option("--base-dir", "base_dir_str", default=None)
 def build_url(base_dir_str):
-    """Print the Yad2 search URL derived from the active search profile."""
+    """Print Yad2 search URL(s) derived from the active search profile.
+
+    One URL per ``search_groups`` entry (or a single URL when groups are empty).
+    """
     from yad2_car_bot.config import load_config
-    from yad2_car_bot.url_builder import build_search_url
+    from yad2_car_bot.url_builder import build_search_urls
 
     base = Path(base_dir_str) if base_dir_str else _base_dir()
     cfg = load_config(base)
-    url = build_search_url(cfg.search_profile)
-    click.echo(url)
+    for url in build_search_urls(cfg.search_profile, cfg.model_catalog):
+        click.echo(url)
 
 
 @cli.command("parse-search-sample")
@@ -134,7 +155,6 @@ def score_sample(base_dir_str):
     base = Path(base_dir_str) if base_dir_str else _base_dir()
     cfg = load_config(base)
 
-    # Parse the bundled samples
     search_html = (base / "samples" / "search_result_card.html").read_text(encoding="utf-8")
     tech_html = (base / "samples" / "listing_detail_technical_section.html").read_text(encoding="utf-8")
     desc_html = (base / "samples" / "listing_detail_description_location_phone_image.html").read_text(encoding="utf-8")
@@ -214,11 +234,16 @@ def render_telegram_sample(base_dir_str):
     help="Where to write the collected HTML. Defaults to debug_snapshots/.",
 )
 def collect(base_dir_str, use_browser, out_path):
-    """Fetch the Yad2 search page and save the HTML. Does not score, store, or notify."""
+    """Fetch Yad2 search page(s) and save HTML. Does not score, store, or notify.
+
+    When ``search_groups`` is set, fetches one URL per group and writes
+    ``search.html``, ``search-2.html``, …
+    """
+    from yad2_car_bot.browser_client import is_radware_verification_page
     from yad2_car_bot.config import load_config
     from yad2_car_bot.debug.snapshots import save_snapshot
     from yad2_car_bot.parsers.search_parser import parse_search_page
-    from yad2_car_bot.url_builder import build_search_url
+    from yad2_car_bot.url_builder import build_search_urls
     from yad2_car_bot.validators import assert_valid_config
 
     base = Path(base_dir_str) if base_dir_str else _base_dir()
@@ -226,9 +251,8 @@ def collect(base_dir_str, use_browser, out_path):
     assert_valid_config(cfg)
 
     client = _make_page_client(use_browser)
-    search_url = build_search_url(cfg.search_profile)
+    search_urls = build_search_urls(cfg.search_profile, cfg.model_catalog)
 
-    click.echo(f"Fetching: {search_url}")
     if use_browser:
         click.secho(
             "[BROWSER] Collecting as soon as listing cards appear.",
@@ -237,32 +261,44 @@ def collect(base_dir_str, use_browser, out_path):
     else:
         click.secho("[HTTP] Collecting with the polite requests client.", fg="cyan")
 
-    try:
-        html = client.get_page(search_url)
-    except RuntimeError as exc:
-        click.secho(f"Failed to fetch search page: {exc}", fg="red")
-        sys.exit(1)
+    for index, search_url in enumerate(search_urls, start=1):
+        if index > 1:
+            click.echo(f"Waiting {_GROUP_PAUSE_SECONDS}s before next search group...")
+            time.sleep(_GROUP_PAUSE_SECONDS)
 
-    from yad2_car_bot.browser_client import is_radware_verification_page
+        click.echo(f"Fetching group {index}/{len(search_urls)}: {search_url}")
+        try:
+            html = client.get_page(search_url, require_listings=False)
+        except RuntimeError as exc:
+            click.secho(f"Failed to fetch search page: {exc}", fg="red")
+            sys.exit(1)
 
-    if is_radware_verification_page(html):
-        click.secho(
-            "The response is Yad2's Radware browser-verification page, not listing HTML. "
-            "Retry with: python -m yad2_car_bot.cli collect --browser",
-            fg="red",
-        )
-        sys.exit(1)
+        if is_radware_verification_page(html):
+            click.secho(
+                "The response is Yad2's Radware browser-verification page, not listing HTML. "
+                "Retry with: python -m yad2_car_bot.cli collect --browser",
+                fg="red",
+            )
+            sys.exit(1)
 
-    if out_path:
-        dest = Path(out_path)
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_text(html, encoding="utf-8")
-    else:
-        dest = save_snapshot(search_url, html, snapshot_dir=str(base / "debug_snapshots"))
+        group_out = _out_path_for_group(out_path, index)
+        if group_out is not None:
+            group_out.parent.mkdir(parents=True, exist_ok=True)
+            group_out.write_text(html, encoding="utf-8")
+            dest = group_out
+        else:
+            dest = save_snapshot(
+                search_url, html, snapshot_dir=str(base / "debug_snapshots")
+            )
 
-    listing_count = len(parse_search_page(html))
-    click.echo(f"Saved {len(html)} chars to {dest}")
-    click.echo(f"Recognized listing cards: {listing_count}")
+        listing_count = len(parse_search_page(html))
+        click.echo(f"Group {index}: saved {len(html)} chars to {dest}")
+        click.echo(f"Group {index}: recognized listing cards: {listing_count}")
+        if listing_count == 0:
+            click.secho(
+                f"Group {index}: no listing cards (empty result or filters too tight).",
+                fg="yellow",
+            )
 
 
 @cli.command("run-once")
@@ -276,14 +312,14 @@ def collect(base_dir_str, use_browser, out_path):
     help="Use a visible, user-assisted Playwright browser instead of HTTP requests.",
 )
 def run_once(base_dir_str, dry_run, db, use_browser):
-    """Run the full pipeline once.
+    """Run the full pipeline once (all search groups).
 
     By default operates in dry-run mode — no Telegram messages are sent.
     Pass --send to actually send notifications.
     """
     from yad2_car_bot.config import load_config
     from yad2_car_bot.validators import assert_valid_config
-    from yad2_car_bot.url_builder import build_search_url
+    from yad2_car_bot.url_builder import build_search_urls
     from yad2_car_bot.parsers.search_parser import parse_search_page, parse_next_data
     from yad2_car_bot.models import DetailListing
     from yad2_car_bot.scoring.keyword_matcher import match_keywords
@@ -306,9 +342,9 @@ def run_once(base_dir_str, dry_run, db, use_browser):
         sys.exit(1)
 
     client = _make_page_client(use_browser, debug_mode=debug_mode)
-    search_url = build_search_url(cfg.search_profile)
+    search_urls = build_search_urls(cfg.search_profile, cfg.model_catalog)
+    primary_url = search_urls[0]
 
-    click.echo(f"Fetching: {search_url}")
     if use_browser:
         click.secho(
             "[BROWSER] Collecting as soon as listing cards appear.",
@@ -316,70 +352,91 @@ def run_once(base_dir_str, dry_run, db, use_browser):
         )
     if dry_run:
         click.secho("[DRY RUN] No Telegram messages will be sent.", fg="yellow")
+    if len(search_urls) > 1:
+        click.echo(f"Running {len(search_urls)} search-group searches.")
 
     with SQLiteStore(db_path) as store:
-        run_id = store.start_run(cfg.search_profile.profile_name, search_url)
+        run_id = store.start_run(cfg.search_profile.profile_name, primary_url)
 
-        try:
-            html = client.get_page(search_url)
-        except RuntimeError as exc:
-            click.secho(f"Failed to fetch search page: {exc}", fg="red")
-            sys.exit(1)
-
-        cards = parse_search_page(html)
-        enrichment_map = parse_next_data(html)
-        click.echo(f"Found {len(cards)} listing(s).")
-
+        total_cards = 0
         new_count = 0
         notify_count = 0
+        seen_listing_ids: set[str] = set()
 
-        for card in cards:
-            is_new = not store.is_known_listing(
-                card.listing_id, card.listing_url, card.raw_card_html_hash
-            )
+        for index, search_url in enumerate(search_urls, start=1):
+            if index > 1:
+                click.echo(f"Waiting {_GROUP_PAUSE_SECONDS}s before next search group...")
+                time.sleep(_GROUP_PAUSE_SECONDS)
 
-            # Build DetailListing from __NEXT_DATA__ JSON (no HTTP fetch needed)
-            enrichment = enrichment_map.get(card.listing_id, {})
-            detail = DetailListing(
-                engine_type=enrichment.get("engine_type"),
-                engine_cc=enrichment.get("engine_cc"),
-                location=enrichment.get("location"),
-                current_ownership=enrichment.get("current_ownership"),
-                images=enrichment.get("images", []),
-                parsed_at=datetime.now(tz=timezone.utc),
-                parser_provenance="search_json_enrichment",
-            )
+            click.echo(f"Fetching group {index}/{len(search_urls)}: {search_url}")
+            try:
+                html = client.get_page(search_url, require_listings=False)
+            except RuntimeError as exc:
+                click.secho(f"Failed to fetch search page: {exc}", fg="red")
+                sys.exit(1)
 
-            matches = match_keywords(
-                detail.description, card.tags, cfg.keyword_rules
-            )
-            scored = score_listing(card, detail, matches, cfg.scoring_rules)
+            cards = parse_search_page(html)
+            enrichment_map = parse_next_data(html)
+            click.echo(f"Group {index}: found {len(cards)} listing(s).")
+            if not cards:
+                click.secho(
+                    f"Group {index}: no listings; continuing with remaining groups.",
+                    fg="yellow",
+                )
+                continue
 
-            store.save_listing(card, detail, matches, scored)
+            for card in cards:
+                if card.listing_id in seen_listing_ids:
+                    click.echo(f"  skip duplicate across groups: {card.listing_id}")
+                    continue
+                seen_listing_ids.add(card.listing_id)
+                total_cards += 1
 
-            if is_new:
-                new_count += 1
-
-            if scored.decision == "notify" and store.should_notify(
-                card.listing_id, scored.score, card.price
-            ):
-                payload = render_message(scored, card, detail, cfg.telegram_template)
-                ok = send_notification(payload, token, chat_id, dry_run=dry_run)
-                if ok:
-                    store.record_notification(
-                        card.listing_id, scored.score, card.price, dry_run=dry_run
-                    )
-                    notify_count += 1
-                    click.echo(
-                        f"  → {'[DRY RUN] ' if dry_run else ''}Notified: {card.listing_id} score={scored.score}"
-                    )
-            else:
-                click.echo(
-                    f"  skip: {card.listing_id} score={scored.score} decision={scored.decision}"
+                is_new = not store.is_known_listing(
+                    card.listing_id, card.listing_url, card.raw_card_html_hash
                 )
 
-        store.finish_run(run_id, len(cards), new_count)
-        click.echo(f"\nDone. New={new_count}, Notified={notify_count}.")
+                enrichment = enrichment_map.get(card.listing_id, {})
+                detail = DetailListing(
+                    engine_type=enrichment.get("engine_type"),
+                    engine_cc=enrichment.get("engine_cc"),
+                    location=enrichment.get("location"),
+                    current_ownership=enrichment.get("current_ownership"),
+                    images=enrichment.get("images", []),
+                    parsed_at=datetime.now(tz=timezone.utc),
+                    parser_provenance="search_json_enrichment",
+                )
+
+                matches = match_keywords(
+                    detail.description, card.tags, cfg.keyword_rules
+                )
+                scored = score_listing(card, detail, matches, cfg.scoring_rules)
+
+                store.save_listing(card, detail, matches, scored)
+
+                if is_new:
+                    new_count += 1
+
+                if scored.decision == "notify" and store.should_notify(
+                    card.listing_id, scored.score, card.price
+                ):
+                    payload = render_message(scored, card, detail, cfg.telegram_template)
+                    ok = send_notification(payload, token, chat_id, dry_run=dry_run)
+                    if ok:
+                        store.record_notification(
+                            card.listing_id, scored.score, card.price, dry_run=dry_run
+                        )
+                        notify_count += 1
+                        click.echo(
+                            f"  → {'[DRY RUN] ' if dry_run else ''}Notified: {card.listing_id} score={scored.score}"
+                        )
+                else:
+                    click.echo(
+                        f"  skip: {card.listing_id} score={scored.score} decision={scored.decision}"
+                    )
+
+        store.finish_run(run_id, total_cards, new_count)
+        click.echo(f"\nDone. Cards={total_cards}, New={new_count}, Notified={notify_count}.")
 
 
 def main():

@@ -20,6 +20,16 @@
       "models": []
     }
   },
+  "search_groups": [
+    {
+      "manufacturers": [19, 21, 27, 36],
+      "models": [10247, 10226, 10238, 10225]
+    },
+    {
+      "manufacturers": [19, 21, 27, 36],
+      "models": [11228, 11150, 10236, 10230]
+    }
+  ],
   "filters": {
     "year": {
       "min": 2016,
@@ -72,9 +82,10 @@
     "ownerID": "1"
   },
   "notes": [
-    "No model parameter should be used in this profile, so the search includes all models under the selected manufacturers.",
     "Implementation-generated URLs should include year=2016-2026.",
     "yad2_source is tracking/navigation metadata and should not be included by default.",
-    "Manufacturer ID 36 is mapped to Suzuki based on the latest manual mapping."
+    "Manufacturer ID 36 is mapped to Suzuki based on the latest manual mapping.",
+    "search_groups drives live collection. Each group is one Yad2 URL: at most 4 manufacturer IDs and at most 4 model IDs total for that group. Empty search_groups falls back to a single URL from cars (all models).",
+    "Model IDs come from data/yad2_car_models.csv (e.g. Toyota Yaris 10247, Corolla 10226)."
   ]
 }

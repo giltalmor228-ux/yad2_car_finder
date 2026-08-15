@@ -57,9 +57,43 @@ Example: add Nissan and drop Suzuki:
 }
 ```
 
-Leave `"models": []` to search **all models** for that manufacturer. Do not add a `model=` query param unless you later extend the profile with real Yad2 model IDs.
+Leave `"models": []` under each brand unused for URL filtering. Live searches are
+driven by ``search_groups`` (below). The ``cars`` map is still used for validation
+and as the fallback when ``search_groups`` is empty.
 
-Also update `expected_yad2_query_params.manufacturer` to the same ID list (comma-separated, same order), or `validate-config` may warn.
+### Search groups (2 Yad2 searches)
+
+Yad2 allows **at most 4 manufacturers** and **at most 4 models total** in one
+search URL. Configure two (or more) groups so one `collect` / `run-once` covers
+more brands/models:
+
+```json
+"search_groups": [
+  {
+    "manufacturers": [19, 21, 27, 36],
+    "models": [10247, 10226, 10238, 10225]
+  },
+  {
+    "manufacturers": [19, 21, 27, 36],
+    "models": [11228, 11150, 10236, 10230]
+  }
+]
+```
+
+Manufacturer IDs: Toyota 19, Hyundai 21, Mazda 27, Suzuki 36, Nissan 32.
+Model IDs: see [data/yad2_car_models.csv](data/yad2_car_models.csv)
+(e.g. Yaris `10247`, Corolla `10226`, RAV4 `10238`, C-HR `10225`).
+
+- Empty `"search_groups": []` → one URL from ``cars`` with **no** `model=` filter.
+- Non-empty → one Yad2 URL per group; `collect` / `run-once --browser` runs them
+  in sequence (short pause between groups).
+- Per group: ≤4 manufacturers, ≤4 models (models are optional; omit/`[]` means
+  all models under those manufacturers).
+- `build-url` prints every URL (one per line).
+- `validate-config` enforces the caps and unknown IDs.
+
+Also update `expected_yad2_query_params.manufacturer` when you change the
+fallback ``cars`` list.
 
 ### Numeric filters
 
@@ -98,7 +132,9 @@ python -m yad2_car_bot.cli validate-config
 python -m yad2_car_bot.cli build-url
 ```
 
-`build-url` prints the Yad2 URL that `--browser` will open. Open it in the debug Chrome once if you want to confirm filters by eye.
+`build-url` prints every Yad2 URL that `--browser` will open (one line per
+`search_groups` entry). Open them in the debug Chrome once if you want to confirm
+filters by eye.
 
 ---
 
@@ -135,12 +171,14 @@ Do not set `PLAYWRIGHT_REUSE_TAB` unless the **car search** tab already shows li
 python -m yad2_car_bot.cli collect --browser --out debug_snapshots/search.html
 ```
 
-Success looks like: `Found N listing card(s)` then `Saved ...` and `Recognized listing cards: N`.
+Success looks like: `Found N listing card(s)` then `Group 1: saved ...` and
+`recognized listing cards`. With two search groups you also get `search-2.html`.
 
 Inspect without hitting the network again:
 
 ```bash
 python -m yad2_car_bot.cli parse-search-sample debug_snapshots/search.html
+python -m yad2_car_bot.cli parse-search-sample debug_snapshots/search-2.html
 ```
 
 ### 3b. Full bot pipeline (parse, score, SQLite)

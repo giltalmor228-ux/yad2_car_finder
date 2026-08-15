@@ -15,6 +15,7 @@ class AppConfig:
     scoring_rules: dict
     telegram_template: str
     base_dir: Path
+    model_catalog: list[dict]
 
 
 def load_config(base_dir: Path | None = None) -> AppConfig:
@@ -37,6 +38,7 @@ def load_config(base_dir: Path | None = None) -> AppConfig:
     telegram_template = (base_dir / "docs" / "telegram_message_template.md").read_text(
         encoding="utf-8"
     )
+    model_catalog = _load_json_list(base_dir / "data" / "yad2_car_models_flat.json")
 
     return AppConfig(
         search_profile=search_profile,
@@ -45,6 +47,7 @@ def load_config(base_dir: Path | None = None) -> AppConfig:
         scoring_rules=scoring_rules,
         telegram_template=telegram_template,
         base_dir=base_dir,
+        model_catalog=model_catalog,
     )
 
 
@@ -53,6 +56,16 @@ def _load_json(path: Path) -> dict:
         return json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError:
         raise FileNotFoundError(f"Config file not found: {path}")
+
+
+def _load_json_list(path: Path) -> list:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Config file not found: {path}")
+    if not isinstance(data, list):
+        raise ValueError(f"Expected a JSON list in {path}")
+    return data
 
 
 def _find_project_root() -> Path:

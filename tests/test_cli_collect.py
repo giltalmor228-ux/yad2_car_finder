@@ -14,8 +14,8 @@ def test_collect_http_writes_out_file(tmp_path, mocker):
 
     assert result.exit_code == 0, result.output
     assert out.read_text(encoding="utf-8") == HTML
-    assert "Saved" in result.output
-    assert "Recognized listing cards:" in result.output
+    assert "saved" in result.output.lower()
+    assert "recognized listing cards:" in result.output.lower()
     assert "[HTTP]" in result.output
 
 
@@ -30,6 +30,29 @@ def test_collect_browser_writes_out_file(tmp_path, mocker):
     factory.assert_called_once_with(True)
     assert out.read_text(encoding="utf-8") == HTML
     assert "[BROWSER]" in result.output
+
+
+def test_collect_two_search_groups_writes_two_files(tmp_path, mocker, app_config):
+    mocker.patch("yad2_car_bot.cli._make_page_client").return_value.get_page.return_value = HTML
+    mocker.patch("yad2_car_bot.cli.time.sleep")
+
+    # Force two URLs without mutating the on-disk profile permanently.
+    mocker.patch(
+        "yad2_car_bot.url_builder.build_search_urls",
+        return_value=[
+            "https://www.yad2.co.il/vehicles/cars?model=1",
+            "https://www.yad2.co.il/vehicles/cars?model=2",
+        ],
+    )
+    out = tmp_path / "search.html"
+
+    result = CliRunner().invoke(cli, ["collect", "--http", "--out", str(out)])
+
+    assert result.exit_code == 0, result.output
+    assert out.exists()
+    assert (tmp_path / "search-2.html").exists()
+    assert "group 1/2" in result.output.lower()
+    assert "group 2/2" in result.output.lower()
 
 
 def test_collect_exits_nonzero_on_radware_page(tmp_path, mocker):
