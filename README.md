@@ -79,7 +79,16 @@ python -m yad2_car_bot.cli run-once --dry-run
 
 # Run and actually send Telegram notifications
 python -m yad2_car_bot.cli run-once --send
+
+# Use a visible Chrome window when the plain HTTP client receives browser verification.
+# Complete any verification yourself, wait for listings, then confirm in the terminal.
+python -m yad2_car_bot.cli run-once --browser --dry-run
 ```
+
+The browser mode is deliberately user-assisted: it does not solve verification,
+forge browser tokens, or run headlessly. By default it uses an installed Google
+Chrome browser. Set `PLAYWRIGHT_BROWSER_CHANNEL` only if you need a different
+Playwright-supported installed browser channel.
 
 ---
 

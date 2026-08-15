@@ -190,7 +190,13 @@ def render_telegram_sample(base_dir_str):
 @click.option("--base-dir", "base_dir_str", default=None)
 @click.option("--dry-run/--send", default=True, help="Default: dry-run (no Telegram).")
 @click.option("--db", default=None, help="SQLite database path.")
-def run_once(base_dir_str, dry_run, db):
+@click.option(
+    "--browser/--http",
+    "use_browser",
+    default=False,
+    help="Use a visible, user-assisted Playwright browser instead of HTTP requests.",
+)
+def run_once(base_dir_str, dry_run, db, use_browser):
     """Run the full pipeline once.
 
     By default operates in dry-run mode — no Telegram messages are sent.
@@ -221,10 +227,20 @@ def run_once(base_dir_str, dry_run, db):
         click.secho("ERROR: TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must be set for --send mode.", fg="red")
         sys.exit(1)
 
-    client = Yad2Client(debug_mode=debug_mode)
+    if use_browser:
+        from yad2_car_bot.browser_client import BrowserYad2Client
+
+        client = BrowserYad2Client()
+    else:
+        client = Yad2Client(debug_mode=debug_mode)
     search_url = build_search_url(cfg.search_profile)
 
     click.echo(f"Fetching: {search_url}")
+    if use_browser:
+        click.secho(
+            "[BROWSER] Verification, if requested, must be completed manually.",
+            fg="cyan",
+        )
     if dry_run:
         click.secho("[DRY RUN] No Telegram messages will be sent.", fg="yellow")
 
