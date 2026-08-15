@@ -119,6 +119,7 @@ def test_parse_next_data_returns_enrichment():
         "engineType": {"text": "בנזין"},
         "engineVolume": 1368,
         "address": {"area": {"text": "תל אביב"}},
+        "subModel": {"text": "Inspire אוט׳ בנזין 1.4 (100 כ״ס)"},
         "metaData": {
             "coverImage": "https://img.yad2.co.il/cover.jpeg",
             "images": ["https://img.yad2.co.il/1.jpeg", "https://img.yad2.co.il/2.jpeg"],
@@ -131,6 +132,7 @@ def test_parse_next_data_returns_enrichment():
     assert enrichment["engine_type"] == "בנזין"
     assert enrichment["engine_cc"] == "1368"
     assert enrichment["location"] == "תל אביב"
+    assert enrichment["gearbox"] == "אוטומט"
     assert len(enrichment["images"]) == 2
     assert enrichment["images"][0].url == "https://img.yad2.co.il/1.jpeg"
 

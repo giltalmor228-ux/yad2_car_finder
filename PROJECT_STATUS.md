@@ -197,6 +197,25 @@ python -m yad2_car_bot.cli run-once --browser --send
 
 Listings are stored in `data/yad2_car_monitor.sqlite`. The bot will not notify twice for the same listing unless the score or price changes materially.
 
+### 3c. Watch every 15 minutes (new ads only)
+
+Keeps Chrome attached, refreshes all search groups on an interval, compares to
+SQLite from the previous cycle, and Telegram-notifies **only brand-new** listings.
+
+```bash
+# First cycle = baseline (store only). Then every 15 min → new ads only.
+python -m yad2_car_bot.cli watch --browser --send
+
+# Dry-run (log would-be notifications, still writes SQLite):
+python -m yad2_car_bot.cli watch --browser --dry-run
+
+# Custom interval (minutes):
+python -m yad2_car_bot.cli watch --browser --send --interval-minutes 15
+```
+
+Stop with Ctrl+C. Use `--no-seed-first` if you want the first cycle to notify
+immediately for ads not already in the DB.
+
 ---
 
 ## What was verified live

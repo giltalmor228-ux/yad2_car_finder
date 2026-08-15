@@ -151,7 +151,10 @@ def test_score_breakdown_sums_to_score(app_config):
 
 
 def test_notify_threshold(app_config):
-    """A high-quality listing should meet the notify threshold."""
+    """A high-quality listing should meet the notify threshold when notify_all is off."""
+    rules = dict(app_config.scoring_rules)
+    rules["notify_all_matches"] = False
+    rules["minimum_score_to_notify"] = 70
     card = _make_card()
     detail = _make_detail(
         km="40,000",
@@ -160,6 +163,17 @@ def test_notify_threshold(app_config):
         description="שמור ומטופל, ספר טיפולים, קבלות, מתחייב בבדיקה",
     )
     matches = match_keywords(detail.description, card.tags, app_config.keyword_rules)
-    scored = score_listing(card, detail, matches, app_config.scoring_rules)
-    assert scored.score >= app_config.scoring_rules["minimum_score_to_notify"]
+    scored = score_listing(card, detail, matches, rules)
+    assert scored.score >= rules["minimum_score_to_notify"]
+    assert scored.decision == "notify"
+
+
+def test_notify_all_matches_forces_notify(app_config):
+    rules = dict(app_config.scoring_rules)
+    rules["notify_all_matches"] = True
+    rules["minimum_score_to_notify"] = 99
+    card = _make_card(hand=None, price=None, image_url=None)
+    detail = _make_detail(current_ownership=None, description="רכב רגיל")
+    matches = match_keywords(detail.description, card.tags, app_config.keyword_rules)
+    scored = score_listing(card, detail, matches, rules)
     assert scored.decision == "notify"

@@ -23,7 +23,7 @@ Store only `phone_available: true/false`.
 🛣️ ק״מ: {km}
 ✋ יד: {hand}
 ⚙️ גיר: {gearbox}
-⛽ מנוע: {engine_type}, {engine_cc}
+⛽ מנוע: {engine}
 📍 מיקום: {location}
 👤 בעלות: {current_ownership}
 🧪 טסט עד: {test_valid_until}

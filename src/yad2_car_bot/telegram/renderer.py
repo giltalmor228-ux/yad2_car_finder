@@ -33,7 +33,7 @@ def _extract_template(raw: str) -> str:
     marker = "## message caption"
     for i, line in enumerate(lines):
         if line.strip().lower().startswith(marker):
-            body_lines = lines[i + 1:]
+            body_lines = lines[i + 1 :]
             # Strip leading blank lines
             while body_lines and not body_lines[0].strip():
                 body_lines.pop(0)
@@ -52,6 +52,26 @@ def _extract_template(raw: str) -> str:
     return "\n".join(body_lines).strip()
 
 
+def _gearbox_from_text(text: Optional[str]) -> Optional[str]:
+    if not text:
+        return None
+    if "אוט" in text:
+        return "אוטומט"
+    if "ידנ" in text:
+        return "ידני"
+    return None
+
+
+def _display(value: Optional[str], fallback: str = "—") -> str:
+    text = (value or "").strip()
+    return text if text else fallback
+
+
+def _format_engine(engine_type: Optional[str], engine_cc: Optional[str]) -> str:
+    parts = [p for p in (_display(engine_type, ""), _display(engine_cc, "")) if p]
+    return ", ".join(parts) if parts else "—"
+
+
 def render_message(
     scored: ScoredListing,
     card: SearchCardListing,
@@ -61,9 +81,10 @@ def render_message(
     """Render a Telegram payload from the template and listing data."""
     template = _extract_template(template_raw)
 
-    positive_str = "\n".join(f"• {r}" for r in scored.positive_reasons) or "—"
-    flags_str = "\n".join(f"• {f}" for f in scored.flags) or "—"
     image_count = len(detail.images) + (1 if card.image_url and not detail.images else 0)
+
+    gearbox = detail.gearbox or _gearbox_from_text(card.subtitle)
+    engine = _format_engine(detail.engine_type, detail.engine_cc)
 
     def build_text(positive_list, flags_list, include_subtitle=True) -> str:
         subtitle = card.subtitle if include_subtitle else ""
@@ -74,14 +95,15 @@ def render_message(
             subtitle=subtitle or "",
             price=card.price or "לא צוין",
             year=str(card.year) if card.year else "—",
-            km=detail.km or "—",
+            km=_display(detail.km),
             hand=str(card.hand) if card.hand is not None else "—",
-            gearbox=detail.gearbox or "—",
+            gearbox=_display(gearbox),
             engine_type=detail.engine_type or "—",
             engine_cc=detail.engine_cc or "—",
-            location=detail.location or "—",
-            current_ownership=detail.current_ownership or "—",
-            test_valid_until=detail.test_valid_until or "—",
+            engine=engine,
+            location=_display(detail.location),
+            current_ownership=_display(detail.current_ownership),
+            test_valid_until=_display(detail.test_valid_until),
             score=scored.score,
             positive_reasons=pos,
             flags=fls,

@@ -88,6 +88,21 @@ def test_render_includes_score(app_config):
     assert "82" in payload.text
 
 
+def test_render_fills_gearbox_from_subtitle(app_config):
+    detail = _make_detail(gearbox=None, engine_type="בנזין", engine_cc="1368")
+    card = _make_card(subtitle="Cross Premium אוט׳ 1.4 (100 כ״ס)")
+    payload = render_message(_make_scored(), card, detail, app_config.telegram_template)
+    assert "אוטומט" in payload.text
+    assert "בנזין, 1368" in payload.text
+
+
+def test_render_engine_omits_empty_parts(app_config):
+    detail = _make_detail(engine_type="בנזין", engine_cc=None)
+    payload = render_message(_make_scored(), _make_card(), detail, app_config.telegram_template)
+    assert "בנזין" in payload.text
+    assert "בנזין, —" not in payload.text
+
+
 def test_render_includes_url(app_config):
     payload = render_message(_make_scored(), _make_card(), _make_detail(), app_config.telegram_template)
     assert "yad2.co.il" in payload.text

@@ -185,7 +185,12 @@ def score_listing(
     total = sum(factors.values())
     total = max(0, min(100, total))
 
-    decision = "notify" if total >= min_notify else "skip"
+    # When notify_all_matches is set, send every non-rejected listing regardless
+    # of score (score is still computed for the Telegram message).
+    if rules.get("notify_all_matches", False):
+        decision = "notify"
+    else:
+        decision = "notify" if total >= min_notify else "skip"
 
     return ScoredListing(
         score=total,

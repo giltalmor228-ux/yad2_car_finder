@@ -1,7 +1,8 @@
 {
   "base_score": 50,
   "hard_reject_score": 0,
-  "minimum_score_to_notify": 70,
+  "notify_all_matches": true,
+  "minimum_score_to_notify": 0,
   "positive": {
     "private_ownership": 10,
     "first_or_second_hand": 10,
