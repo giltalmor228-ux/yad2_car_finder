@@ -30,6 +30,81 @@
       }
     }
   },
+  "הונדה": {
+    "yad2_manufacturer_id": 17,
+    "name_he": "הונדה",
+    "name_en": "Honda",
+    "models": {
+      "10183": {
+        "name": "CR-V",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "10184": {
+        "name": "CR-Z",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "10185": {
+        "name": "FR-V",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "10186": {
+        "name": "HR-V",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "10193": {
+        "name": "S2000",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "10190": {
+        "name": "אודיסיי",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "10187": {
+        "name": "אינסייט",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "10181": {
+        "name": "אקורד",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "10188": {
+        "name": "ג'אז",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "10189": {
+        "name": "לג'נד",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "10195": {
+        "name": "סטרים",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "10182": {
+        "name": "סיוויק",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "13419": {
+        "name": "סיוויק Type R",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "11069": {
+        "name": "סיטי",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "10191": {
+        "name": "פיילוט",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "10192": {
+        "name": "פרלוד",
+        "source_file": "conversation Honda checklist HTML"
+      },
+      "11070": {
+        "name": "קלריטי",
+        "source_file": "conversation Honda checklist HTML"
+      }
+    }
+  },
   "טויוטה": {
     "yad2_manufacturer_id": 19,
     "name_he": "טויוטה",

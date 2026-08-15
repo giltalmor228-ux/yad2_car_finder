@@ -48,6 +48,142 @@
     "source_file": "Pasted text(10).txt"
   },
   {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "CR-V",
+    "yad2_model_id": 10183,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "CR-Z",
+    "yad2_model_id": 10184,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "FR-V",
+    "yad2_model_id": 10185,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "HR-V",
+    "yad2_model_id": 10186,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "S2000",
+    "yad2_model_id": 10193,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "אודיסיי",
+    "yad2_model_id": 10190,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "אינסייט",
+    "yad2_model_id": 10187,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "אקורד",
+    "yad2_model_id": 10181,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "ג'אז",
+    "yad2_model_id": 10188,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "לג'נד",
+    "yad2_model_id": 10189,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "סטרים",
+    "yad2_model_id": 10195,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "סיוויק",
+    "yad2_model_id": 10182,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "סיוויק Type R",
+    "yad2_model_id": 13419,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "סיטי",
+    "yad2_model_id": 11069,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "פיילוט",
+    "yad2_model_id": 10191,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "פרלוד",
+    "yad2_model_id": 10192,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
+    "manufacturer_name": "הונדה",
+    "manufacturer_name_en": "Honda",
+    "yad2_manufacturer_id": 17,
+    "model_name": "קלריטי",
+    "yad2_model_id": 11070,
+    "source_file": "conversation Honda checklist HTML"
+  },
+  {
     "manufacturer_name": "טויוטה",
     "manufacturer_name_en": "Toyota",
     "yad2_manufacturer_id": 19,

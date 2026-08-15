@@ -35,6 +35,11 @@
       "name_en": "Nissan",
       "name_he": "ניסאן",
       "verification_status": "manual_verify_once"
+    },
+    "17": {
+      "name_en": "Honda",
+      "name_he": "הונדה",
+      "verification_status": "verified_manual"
     }
   }
 }

@@ -3,31 +3,43 @@
   "source": "yad2",
   "category": "vehicles/cars",
   "cars": {
-    "Toyota": {
-      "manufacturer_id": 19,
-      "models": []
-    },
-    "Suzuki": {
-      "manufacturer_id": 36,
+    "Honda": {
+      "manufacturer_id": 17,
       "models": []
     },
     "Hyundai": {
       "manufacturer_id": 21,
       "models": []
     },
+    "Toyota": {
+      "manufacturer_id": 19,
+      "models": []
+    },
     "Mazda": {
       "manufacturer_id": 27,
+      "models": []
+    },
+    "Suzuki": {
+      "manufacturer_id": 36,
       "models": []
     }
   },
   "search_groups": [
     {
-      "manufacturers": [19, 21, 27, 36],
-      "models": [10247, 10226, 10238, 10225]
+      "manufacturers": [17],
+      "models": [10182, 10188]
     },
     {
-      "manufacturers": [19, 21, 27, 36],
-      "models": [11228, 11150, 10236, 10230]
+      "manufacturers": [21],
+      "models": [13276, 10281, 10279, 10263]
+    },
+    {
+      "manufacturers": [19, 27],
+      "models": [10226, 10247, 10331, 10332]
+    },
+    {
+      "manufacturers": [36],
+      "models": [10487, 10497, 10490]
     }
   ],
   "filters": {
@@ -69,7 +81,7 @@
     "image_only": true
   },
   "expected_yad2_query_params": {
-    "manufacturer": "19,36,21,27",
+    "manufacturer": "17,21,19,27,36",
     "year": "2016-2026",
     "price": "28000-55000",
     "km": "5000-150000",
@@ -82,10 +94,11 @@
     "ownerID": "1"
   },
   "notes": [
-    "Implementation-generated URLs should include year=2016-2026.",
-    "yad2_source is tracking/navigation metadata and should not be included by default.",
-    "Manufacturer ID 36 is mapped to Suzuki based on the latest manual mapping.",
-    "search_groups drives live collection. Each group is one Yad2 URL: at most 4 manufacturer IDs and at most 4 model IDs total for that group. Empty search_groups falls back to a single URL from cars (all models).",
-    "Model IDs come from data/yad2_car_models.csv (e.g. Toyota Yaris 10247, Corolla 10226)."
+    "search_groups drives live collection. Each group is one Yad2 URL: ≤4 manufacturers and ≤4 models total.",
+    "Groups are manufacturer-aligned so Yad2 applies model= correctly.",
+    "Honda 17: סיוויק 10182, ג'אז 10188",
+    "Hyundai 21: I35 13276, ix35 (I35x) 10281, איוניק 10279, אלנטרה 10263",
+    "Toyota 19 + Mazda 27: קורולה 10226, יאריס 10247, מאזדה 2 10331, מאזדה 3 10332",
+    "Suzuki 36: בלנו 10487, סוויפט 10497, קרוסאובר 10490"
   ]
 }

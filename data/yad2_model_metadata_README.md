@@ -12,17 +12,22 @@ Generated from the HTML snippets provided in this conversation.
 ## Important limitation
 
 The uploaded model checklist HTML contains manufacturer group names and model IDs, but not manufacturer IDs.
-Only Toyota has `yad2_manufacturer_id=19` because it was provided manually in the conversation.
-The other manufacturer IDs are currently `null` in JSON / empty in CSV / NULL in SQLite until the manufacturer dropdown HTML is provided.
+Manufacturer IDs are filled when provided manually (e.g. Toyota=19, Honda=17, Hyundai=21, Mazda=27, Suzuki=36, Nissan=32).
+Some manufacturer IDs may still be `null` until confirmed from Yad2.
 
 ## Parsed source summary
 
 - Pasted text(10).txt: 35 model rows parsed
 - Pasted text(11).txt: 128 model rows parsed
+- conversation Honda checklist HTML: 17 model rows (Honda manufacturer_id=17)
 
-Total unique model records: 163
-Total manufacturer groups: 6
-Manufacturer groups: אבארט, טויוטה, יונדאי, מאזדה, ניסאן, סוזוקי
+Total unique model records: 180
+Total manufacturer groups: 7
+Manufacturer groups: אבארט, הונדה, טויוטה, יונדאי, מאזדה, ניסאן, סוזוקי
+
+## Suggested next step
+
+Provide additional manufacturer dropdown / model checklist HTML to expand the catalog.
 
 ## Suggested next step
 
