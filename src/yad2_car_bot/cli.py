@@ -246,7 +246,7 @@ def collect(base_dir_str, use_browser, out_path):
     from yad2_car_bot.browser_client import is_radware_verification_page
     from yad2_car_bot.config import load_config
     from yad2_car_bot.debug.snapshots import save_snapshot
-    from yad2_car_bot.parsers.search_parser import parse_search_page
+    from yad2_car_bot.search_pages import fetch_all_search_pages
     from yad2_car_bot.url_builder import build_search_urls
     from yad2_car_bot.validators import assert_valid_config
 
@@ -259,7 +259,7 @@ def collect(base_dir_str, use_browser, out_path):
 
     if use_browser:
         click.secho(
-            "[BROWSER] Collecting as soon as listing cards appear.",
+            "[BROWSER] Collecting all result pages (paginate until end).",
             fg="cyan",
         )
     else:
@@ -272,12 +272,14 @@ def collect(base_dir_str, use_browser, out_path):
 
         click.echo(f"Fetching group {index}/{len(search_urls)}: {search_url}")
         try:
-            html = client.get_page(search_url, require_listings=False)
+            cards, _enrichment, html = fetch_all_search_pages(
+                client, search_url, log=click.echo
+            )
         except RuntimeError as exc:
             click.secho(f"Failed to fetch search page: {exc}", fg="red")
             sys.exit(1)
 
-        if is_radware_verification_page(html):
+        if html and is_radware_verification_page(html):
             click.secho(
                 "The response is Yad2's Radware browser-verification page, not listing HTML. "
                 "Retry with: python -m yad2_car_bot.cli collect --browser",
@@ -285,20 +287,20 @@ def collect(base_dir_str, use_browser, out_path):
             )
             sys.exit(1)
 
-        group_out = _out_path_for_group(out_path, index)
-        if group_out is not None:
-            group_out.parent.mkdir(parents=True, exist_ok=True)
-            group_out.write_text(html, encoding="utf-8")
-            dest = group_out
-        else:
-            dest = save_snapshot(
-                search_url, html, snapshot_dir=str(base / "debug_snapshots")
-            )
+        if html:
+            group_out = _out_path_for_group(out_path, index)
+            if group_out is not None:
+                group_out.parent.mkdir(parents=True, exist_ok=True)
+                group_out.write_text(html, encoding="utf-8")
+                dest = group_out
+            else:
+                dest = save_snapshot(
+                    search_url, html, snapshot_dir=str(base / "debug_snapshots")
+                )
+            click.echo(f"Group {index}: saved page-1 HTML ({len(html)} chars) to {dest}")
 
-        listing_count = len(parse_search_page(html))
-        click.echo(f"Group {index}: saved {len(html)} chars to {dest}")
-        click.echo(f"Group {index}: recognized listing cards: {listing_count}")
-        if listing_count == 0:
+        click.echo(f"Group {index}: recognized listing cards across pages: {len(cards)}")
+        if len(cards) == 0:
             click.secho(
                 f"Group {index}: no listing cards (empty result or filters too tight).",
                 fg="yellow",
@@ -311,8 +313,7 @@ def _run_pipeline(
     client,
     store,
     search_urls: list[str],
-    token: str,
-    chat_id: str,
+    notify_targets,
     dry_run: bool,
     notify_mode: str = "standard",
 ) -> dict[str, int]:
@@ -321,18 +322,15 @@ def _run_pipeline(
     ``notify_mode``:
       - ``standard``: notify by score + ``should_notify`` (incl. price/score re-notify)
       - ``new_only``: notify only listings never seen in SQLite before
-      - ``none``: store/score only; never send Telegram (baseline / seed run)
+      - ``none``: store/score only; never notify (baseline / seed run)
     """
     from yad2_car_bot.models import DetailListing
+    from yad2_car_bot.notify import send_via_channels
     from yad2_car_bot.parsers.detail_parser import enrich_detail_from_html
-    from yad2_car_bot.parsers.search_parser import (
-        _gearbox_from_text,
-        parse_next_data,
-        parse_search_page,
-    )
+    from yad2_car_bot.parsers.search_parser import _gearbox_from_text
     from yad2_car_bot.scoring.keyword_matcher import match_keywords
     from yad2_car_bot.scoring.scoring_engine import score_listing
-    from yad2_car_bot.telegram.notifier import send_notification
+    from yad2_car_bot.search_pages import fetch_all_search_pages
     from yad2_car_bot.telegram.renderer import render_message
 
     if notify_mode not in {"standard", "new_only", "none"}:
@@ -354,15 +352,15 @@ def _run_pipeline(
 
         click.echo(f"Fetching group {index}/{len(search_urls)}: {search_url}")
         try:
-            html = client.get_page(search_url, require_listings=False)
+            cards, enrichment_map, _page1_html = fetch_all_search_pages(
+                client, search_url, log=click.echo
+            )
         except RuntimeError as exc:
             click.secho(f"Failed to fetch search page: {exc}", fg="red")
             store.finish_run(run_id, total_cards, new_count)
             raise
 
-        cards = parse_search_page(html)
-        enrichment_map = parse_next_data(html)
-        click.echo(f"Group {index}: found {len(cards)} listing(s).")
+        click.echo(f"Group {index}: found {len(cards)} listing(s) across page(s).")
         if not cards:
             click.secho(
                 f"Group {index}: no listings; continuing with remaining groups.",
@@ -441,14 +439,20 @@ def _run_pipeline(
 
             if should_send:
                 payload = render_message(scored, card, detail, cfg.telegram_template)
-                ok = send_notification(payload, token, chat_id, dry_run=dry_run)
+                ok = send_via_channels(
+                    payload,
+                    notify_targets,
+                    subject=card.title or None,
+                    dry_run=dry_run,
+                )
                 if ok:
                     store.record_notification(
                         card.listing_id, scored.score, card.price, dry_run=dry_run
                     )
                     notify_count += 1
+                    channels = ",".join(notify_targets.channels)
                     click.echo(
-                        f"  → {'[DRY RUN] ' if dry_run else ''}Notified: "
+                        f"  → {'[DRY RUN] ' if dry_run else ''}Notified ({channels}): "
                         f"{card.listing_id} score={scored.score}"
                     )
             else:
@@ -460,6 +464,15 @@ def _run_pipeline(
                 )
 
     store.finish_run(run_id, total_cards, new_count)
+
+    try:
+        from yad2_car_bot.csv_export import export_listings_csv
+
+        csv_path = export_listings_csv(store.db_path)
+        click.echo(f"CSV updated: {csv_path}")
+    except Exception as exc:
+        click.secho(f"CSV export failed: {exc}", fg="yellow")
+
     return {
         "cards": total_cards,
         "new": new_count,
@@ -467,9 +480,15 @@ def _run_pipeline(
     }
 
 
-def _prepare_run(base_dir_str, dry_run, db, use_browser):
+def _prepare_run(base_dir_str, dry_run, db, use_browser, notify_choice=None):
     """Load config/client/urls shared by ``run-once`` and ``watch``."""
     from yad2_car_bot.config import load_config
+    from yad2_car_bot.notify import (
+        NotifyTargets,
+        channels_from_cli_or_env,
+        load_email_settings_from_env,
+        validate_notify_targets,
+    )
     from yad2_car_bot.url_builder import build_search_urls
     from yad2_car_bot.validators import assert_valid_config
 
@@ -478,15 +497,22 @@ def _prepare_run(base_dir_str, dry_run, db, use_browser):
     assert_valid_config(cfg)
 
     db_path = db or str(base / "data" / "yad2_car_monitor.sqlite")
-    token = os.getenv("TELEGRAM_BOT_TOKEN", "")
-    chat_id = os.getenv("TELEGRAM_CHAT_ID", "")
     debug_mode = os.getenv("DEBUG_SNAPSHOTS", "false").lower() == "true"
 
-    if not dry_run and (not token or not chat_id):
-        click.secho(
-            "ERROR: TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must be set for --send mode.",
-            fg="red",
-        )
+    try:
+        channels = channels_from_cli_or_env(notify_choice)
+    except ValueError as exc:
+        click.secho(f"ERROR: {exc}", fg="red")
+        sys.exit(1)
+
+    notify_targets = NotifyTargets(
+        channels=channels,
+        telegram_token=os.getenv("TELEGRAM_BOT_TOKEN", ""),
+        telegram_chat_id=os.getenv("TELEGRAM_CHAT_ID", ""),
+        email=load_email_settings_from_env(),
+    )
+    for err in validate_notify_targets(notify_targets, dry_run=dry_run):
+        click.secho(f"ERROR: {err}", fg="red")
         sys.exit(1)
 
     client = _make_page_client(use_browser, debug_mode=debug_mode)
@@ -494,20 +520,63 @@ def _prepare_run(base_dir_str, dry_run, db, use_browser):
 
     if use_browser:
         click.secho(
-            "[BROWSER] Collecting as soon as listing cards appear.",
+            "[BROWSER] Collecting after listing cards stabilize + scroll-load.",
             fg="cyan",
         )
+    channel_label = ",".join(channels)
     if dry_run:
-        click.secho("[DRY RUN] No Telegram messages will be sent.", fg="yellow")
+        click.secho(
+            f"[DRY RUN] No notifications will be sent (channels: {channel_label}).",
+            fg="yellow",
+        )
+    else:
+        click.secho(f"[NOTIFY] Channels: {channel_label}", fg="cyan")
     if len(search_urls) > 1:
         click.echo(f"Running {len(search_urls)} search-group searches.")
 
-    return cfg, client, search_urls, db_path, token, chat_id
+    return cfg, client, search_urls, db_path, notify_targets
+
+
+_NOTIFY_CHANNEL_OPTION = click.option(
+    "--notify",
+    "notify_choice",
+    default=None,
+    type=click.Choice(["telegram", "email", "both"], case_sensitive=False),
+    help=(
+        "Where to send alerts: telegram, email, or both. "
+        "Default: NOTIFY_CHANNELS env, or telegram if unset."
+    ),
+)
+
+
+@cli.command("export-csv")
+@click.option("--base-dir", "base_dir_str", default=None)
+@click.option("--db", default=None, help="SQLite database path.")
+@click.option(
+    "--out",
+    "out_path",
+    default=None,
+    type=click.Path(dir_okay=False, writable=True),
+    help="CSV output path (default: data/listings_export.csv).",
+)
+def export_csv(base_dir_str, db, out_path):
+    """Export all known listings to a CSV with notification message fields."""
+    from yad2_car_bot.csv_export import export_listings_csv
+
+    base = Path(base_dir_str) if base_dir_str else _base_dir()
+    db_path = db or str(base / "data" / "yad2_car_monitor.sqlite")
+    csv_path = out_path or str(base / "data" / "listings_export.csv")
+    written = export_listings_csv(db_path, csv_path)
+    click.echo(f"Wrote {written}")
 
 
 @cli.command("run-once")
 @click.option("--base-dir", "base_dir_str", default=None)
-@click.option("--dry-run/--send", default=True, help="Default: dry-run (no Telegram).")
+@click.option(
+    "--dry-run/--send",
+    default=True,
+    help="Default: dry-run (no notifications sent).",
+)
 @click.option("--db", default=None, help="SQLite database path.")
 @click.option(
     "--browser/--http",
@@ -515,16 +584,17 @@ def _prepare_run(base_dir_str, dry_run, db, use_browser):
     default=False,
     help="Use a visible, user-assisted Playwright browser instead of HTTP requests.",
 )
-def run_once(base_dir_str, dry_run, db, use_browser):
+@_NOTIFY_CHANNEL_OPTION
+def run_once(base_dir_str, dry_run, db, use_browser, notify_choice):
     """Run the full pipeline once (all search groups).
 
-    By default operates in dry-run mode — no Telegram messages are sent.
-    Pass --send to actually send notifications.
+    By default operates in dry-run mode — no notifications are sent.
+    Pass --send to actually send notifications (Telegram and/or email).
     """
     from yad2_car_bot.storage.sqlite_store import SQLiteStore
 
-    cfg, client, search_urls, db_path, token, chat_id = _prepare_run(
-        base_dir_str, dry_run, db, use_browser
+    cfg, client, search_urls, db_path, notify_targets = _prepare_run(
+        base_dir_str, dry_run, db, use_browser, notify_choice
     )
 
     with SQLiteStore(db_path) as store:
@@ -534,8 +604,7 @@ def run_once(base_dir_str, dry_run, db, use_browser):
                 client=client,
                 store=store,
                 search_urls=search_urls,
-                token=token,
-                chat_id=chat_id,
+                notify_targets=notify_targets,
                 dry_run=dry_run,
                 notify_mode="standard",
             )
@@ -550,7 +619,11 @@ def run_once(base_dir_str, dry_run, db, use_browser):
 
 @cli.command("watch")
 @click.option("--base-dir", "base_dir_str", default=None)
-@click.option("--dry-run/--send", default=True, help="Default: dry-run (no Telegram).")
+@click.option(
+    "--dry-run/--send",
+    default=True,
+    help="Default: dry-run (no notifications sent).",
+)
 @click.option("--db", default=None, help="SQLite database path.")
 @click.option(
     "--browser/--http",
@@ -567,29 +640,36 @@ def run_once(base_dir_str, dry_run, db, use_browser):
 )
 @click.option(
     "--seed-first/--no-seed-first",
-    default=True,
-    help="First cycle only stores listings (no Telegram), then notify new ads only.",
+    default=False,
+    help=(
+        "If set, first cycle only stores listings (no notify). "
+        "Default: notify on first cycle for ads not already in the DB."
+    ),
 )
-def watch(base_dir_str, dry_run, db, use_browser, interval_minutes, seed_first):
-    """Refresh every N minutes and Telegram only brand-new listings.
+@_NOTIFY_CHANNEL_OPTION
+def watch(
+    base_dir_str, dry_run, db, use_browser, interval_minutes, seed_first, notify_choice
+):
+    """Refresh every N minutes and notify only brand-new listings.
 
     Compares each cycle to listings already stored in SQLite (from the previous
     cycle / earlier runs). Existing ads are skipped; only new matching ads are
-    notified.
+    notified (``--notify telegram|email|both``).
 
-    With ``--seed-first`` (default), the first cycle builds a baseline without
-    sending messages, waits ``--interval-minutes``, then starts notifying.
+    By default the first cycle already notifies for listings not in the DB.
+    Pass ``--seed-first`` if you want a silent baseline cycle first.
     """
     from yad2_car_bot.storage.sqlite_store import SQLiteStore
 
-    cfg, client, search_urls, db_path, token, chat_id = _prepare_run(
-        base_dir_str, dry_run, db, use_browser
+    cfg, client, search_urls, db_path, notify_targets = _prepare_run(
+        base_dir_str, dry_run, db, use_browser, notify_choice
     )
 
     interval_seconds = interval_minutes * 60
     click.secho(
         f"[WATCH] Every {interval_minutes} min · notify new listings only"
-        f"{' · first cycle = baseline (no Telegram)' if seed_first else ''}. "
+        f"{' · first cycle = baseline (no notify)' if seed_first else ' · first cycle notifies new-to-DB ads'}"
+        f" · channels={','.join(notify_targets.channels)}. "
         "Ctrl+C to stop.",
         fg="cyan",
     )
@@ -613,8 +693,7 @@ def watch(base_dir_str, dry_run, db, use_browser, interval_minutes, seed_first):
                     client=client,
                     store=store,
                     search_urls=search_urls,
-                    token=token,
-                    chat_id=chat_id,
+                    notify_targets=notify_targets,
                     dry_run=dry_run,
                     notify_mode=notify_mode,
                 )

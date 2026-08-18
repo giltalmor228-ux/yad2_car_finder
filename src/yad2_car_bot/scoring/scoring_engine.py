@@ -42,6 +42,42 @@ _KEYWORD_TO_FACTOR: dict[tuple[str, str], str] = {
 }
 
 
+def _ownership_matches_any(text: str, terms: list[str]) -> bool:
+    return any(term and term in text for term in terms)
+
+
+def _reject_non_private_original_ownership(
+    detail: DetailListing, rules: dict
+) -> str | None:
+    """Return a reject reason if original ownership fails the configured filter.
+
+    Controlled by ``scoring_rules.original_ownership_filter``:
+    - ``enabled`` (default false): turn the filter on
+    - ``rejected_substrings``: hard-reject when any term appears in original ownership
+    - ``allowed_substrings``: if set and none match a known original ownership, reject
+    - ``reject_when_missing``: reject when original ownership was not parsed
+    """
+    cfg = rules.get("original_ownership_filter") or {}
+    if not cfg.get("enabled", False):
+        return None
+
+    original = (detail.original_ownership or "").strip()
+    if not original:
+        if cfg.get("reject_when_missing", False):
+            return "original_ownership missing"
+        return None
+
+    rejected = list(cfg.get("rejected_substrings") or [])
+    if _ownership_matches_any(original, rejected):
+        return f"original_ownership non-private: '{original}'"
+
+    allowed = list(cfg.get("allowed_substrings") or [])
+    if allowed and not _ownership_matches_any(original, allowed):
+        return f"original_ownership not in allow-list: '{original}'"
+
+    return None
+
+
 def score_listing(
     card: SearchCardListing,
     detail: DetailListing,
@@ -64,13 +100,21 @@ def score_listing(
 
     # ── Hard reject check ────────────────────────────────────────────────────
     hard_rejects = [m for m in matches if m.category == "hard_reject"]
-    if hard_rejects:
-        reason_str = ", ".join(
-            f"{m.subcategory}: '{m.term}'" for m in hard_rejects
-        )
+    ownership_reject = _reject_non_private_original_ownership(detail, rules)
+    if hard_rejects or ownership_reject:
+        reason_parts: list[str] = []
+        if hard_rejects:
+            reason_parts.append(
+                ", ".join(f"{m.subcategory}: '{m.term}'" for m in hard_rejects)
+            )
+        if ownership_reject:
+            reason_parts.append(ownership_reject)
+        reason_str = "; ".join(reason_parts)
         return ScoredListing(
             score=hard_reject_score,
-            score_breakdown=ScoreBreakdown(factors={"hard_reject": hard_reject_score - base_score}),
+            score_breakdown=ScoreBreakdown(
+                factors={"hard_reject": hard_reject_score - base_score}
+            ),
             positive_reasons=[],
             flags=[f"HARD REJECT — {reason_str}"],
             decision="rejected",

@@ -22,6 +22,8 @@ _NEXT_DATA_RE = re.compile(
     re.DOTALL,
 )
 
+_FEED_BUCKETS = ("private", "commercial", "platinum", "solo", "boost")
+
 
 def _canonicalize_url(listing_type: str, listing_id: str) -> str:
     """Build the canonical detail page URL from listing type and ID.
@@ -32,8 +34,170 @@ def _canonicalize_url(listing_type: str, listing_id: str) -> str:
     return f"{_BASE_URL}/vehicles/item/{listing_id}"
 
 
-def parse_search_page(html: str) -> list[SearchCardListing]:
-    """Parse all listing cards from a Yad2 search results page (or card fragment)."""
+def _load_next_data_payload(html: str) -> dict | list | None:
+    """Return the search-feed payload from ``__NEXT_DATA__``, or None."""
+    m = _NEXT_DATA_RE.search(html)
+    if not m:
+        return None
+    try:
+        data = json.loads(m.group(1))
+        queries = data["props"]["pageProps"]["dehydratedState"]["queries"]
+        return queries[0]["state"]["data"]
+    except (KeyError, IndexError, ValueError, TypeError):
+        return None
+
+
+def parse_feed_pagination(html: str) -> dict | None:
+    """Return ``{pages, perPage, total}`` from feed ``__NEXT_DATA__``, if present."""
+    payload = _load_next_data_payload(html)
+    if not isinstance(payload, dict):
+        return None
+    pagination = payload.get("pagination")
+    if not isinstance(pagination, dict):
+        return None
+    pages = pagination.get("pages")
+    try:
+        pages_int = int(pages) if pages is not None else None
+    except (TypeError, ValueError):
+        pages_int = None
+    if not pages_int or pages_int < 1:
+        return None
+    return {
+        "pages": pages_int,
+        "perPage": pagination.get("perPage"),
+        "total": pagination.get("total"),
+    }
+
+
+def _iter_feed_items(payload: dict | list) -> list[tuple[str, dict]]:
+    """Yield ``(bucket_name, item)`` for every listing in the feed payload."""
+    items: list[tuple[str, dict]] = []
+    if isinstance(payload, dict):
+        for key in _FEED_BUCKETS:
+            bucket = payload.get(key) or []
+            if isinstance(bucket, list):
+                for item in bucket:
+                    if isinstance(item, dict):
+                        items.append((key, item))
+    elif isinstance(payload, list):
+        for item in payload:
+            if isinstance(item, dict):
+                items.append(("list", item))
+    return items
+
+
+def _format_price(price) -> str | None:
+    if price is None or price == "":
+        return None
+    if isinstance(price, str):
+        return price
+    try:
+        value = int(price)
+    except (TypeError, ValueError):
+        return str(price)
+    return f"{value:,} ₪"
+
+
+def _listing_type_from_item(item: dict, bucket: str) -> str:
+    ad_type = (item.get("adType") or "").strip().lower()
+    if ad_type == "private":
+        return "private-vehicle"
+    if bucket in {"platinum", "solo"}:
+        return f"vehicle-agency-{bucket}"
+    if ad_type == "commercial" or bucket == "commercial":
+        return "vehicle-agency"
+    return ad_type or bucket or "unknown"
+
+
+def _card_from_feed_item(item: dict, bucket: str) -> SearchCardListing | None:
+    token = item.get("token")
+    if not token:
+        return None
+
+    manufacturer = ((item.get("manufacturer") or {}).get("text") or "").strip()
+    model = ((item.get("model") or {}).get("text") or "").strip()
+    title = f"{manufacturer} {model}".strip() or None
+    subtitle = ((item.get("subModel") or {}).get("text") or "") or None
+
+    year = (item.get("vehicleDates") or {}).get("yearOfProduction")
+    try:
+        year_int = int(year) if year is not None else None
+    except (TypeError, ValueError):
+        year_int = None
+
+    hand_raw = (item.get("hand") or {}).get("id")
+    try:
+        hand = int(hand_raw) if hand_raw is not None else None
+    except (TypeError, ValueError):
+        hand = None
+
+    meta = item.get("metaData") or {}
+    image_url = meta.get("coverImage")
+    if not image_url:
+        images = meta.get("images") or []
+        image_url = images[0] if images else None
+
+    tags = [
+        t.get("name")
+        for t in (item.get("tags") or [])
+        if isinstance(t, dict) and t.get("name")
+    ]
+
+    listing_type = _listing_type_from_item(item, bucket)
+    listing_url = _canonicalize_url(listing_type, token)
+    fingerprint = json.dumps(
+        {"token": token, "bucket": bucket, "price": item.get("price")},
+        sort_keys=True,
+        ensure_ascii=False,
+    )
+    raw_hash = hashlib.md5(fingerprint.encode("utf-8")).hexdigest()
+
+    return SearchCardListing(
+        listing_id=token,
+        listing_url_relative=f"/vehicles/item/{token}",
+        listing_url=listing_url,
+        listing_type=listing_type,
+        title=title,
+        subtitle=subtitle,
+        year=year_int,
+        hand=hand,
+        price=_format_price(item.get("price")),
+        image_url=image_url,
+        tags=tags,
+        raw_card_html_hash=raw_hash,
+        parsed_at=datetime.now(tz=timezone.utc),
+        source_flags=[f"feed:{bucket}", f"adType:{(item.get('adType') or 'unknown')}"],
+        parser_provenance="search_parser.parse_search_feed",
+    )
+
+
+def parse_search_feed_cards(html: str) -> list[SearchCardListing]:
+    """Build listing cards from all ``__NEXT_DATA__`` feed buckets.
+
+    Yad2 splits the visible feed into private / commercial / platinum / solo.
+    DOM parsing only sees private ``private-item-link`` cards; this function
+    returns the full page inventory (deduped by token).
+    """
+    payload = _load_next_data_payload(html)
+    if payload is None:
+        return []
+
+    results: list[SearchCardListing] = []
+    seen: set[str] = set()
+    for bucket, item in _iter_feed_items(payload):
+        token = item.get("token")
+        if not token or token in seen:
+            continue
+        card = _card_from_feed_item(item, bucket)
+        if not card:
+            continue
+        seen.add(token)
+        results.append(card)
+    return results
+
+
+def parse_search_page_dom(html: str) -> list[SearchCardListing]:
+    """Parse listing cards from DOM anchors only (private-item-link)."""
     soup = parse_html(html)
     cards = soup.select('a[data-nagish="private-item-link"][data-listing-type]')
 
@@ -47,6 +211,19 @@ def parse_search_page(html: str) -> list[SearchCardListing]:
             pass  # skip malformed cards silently; caller can inspect raw HTML
 
     return results
+
+
+def parse_search_page(html: str) -> list[SearchCardListing]:
+    """Parse all listing cards from a Yad2 search results page.
+
+    Prefers ``__NEXT_DATA__`` feed buckets (private + commercial + platinum +
+    solo) so agency/platinum cards the user sees are not dropped. Falls back
+    to DOM private-card parsing when feed JSON is missing.
+    """
+    feed_cards = parse_search_feed_cards(html)
+    if feed_cards:
+        return feed_cards
+    return parse_search_page_dom(html)
 
 
 def _gearbox_from_text(text: str | None) -> str | None:
@@ -68,29 +245,12 @@ def parse_next_data(html: str) -> dict[str, dict]:
 
     Returns {} on any parse error so the caller can fall back gracefully.
     """
-    m = _NEXT_DATA_RE.search(html)
-    if not m:
+    payload = _load_next_data_payload(html)
+    if payload is None:
         return {}
-
-    try:
-        data = json.loads(m.group(1))
-        queries = data["props"]["pageProps"]["dehydratedState"]["queries"]
-        payload = queries[0]["state"]["data"]
-    except (KeyError, IndexError, ValueError, TypeError):
-        return {}
-
-    # Search feed may split ads across private / commercial / platinum / solo.
-    listings: list[dict] = []
-    if isinstance(payload, dict):
-        for key in ("private", "commercial", "platinum", "solo", "boost"):
-            bucket = payload.get(key) or []
-            if isinstance(bucket, list):
-                listings.extend(bucket)
-    elif isinstance(payload, list):
-        listings = payload
 
     result: dict[str, dict] = {}
-    for item in listings:
+    for bucket, item in _iter_feed_items(payload):
         token = item.get("token")
         if not token:
             continue
@@ -111,14 +271,25 @@ def parse_next_data(html: str) -> dict[str, dict]:
         sub_model_text = ((item.get("subModel") or {}).get("text") or "") or None
         gearbox = _gearbox_from_text(sub_model_text)
 
+        ad_type = (item.get("adType") or "").strip().lower()
+        customer = item.get("customer") or {}
+        if customer.get("agencyName"):
+            ownership = f"סוכנות ({customer['agencyName']})"
+        elif ad_type == "private" or bucket == "private":
+            ownership = "פרטית"
+        else:
+            ownership = None
+
         result[token] = {
             "images": images,
             "engine_type": engine_type,
             "engine_cc": engine_cc,
             "location": location,
-            "current_ownership": "פרטית",  # ownerID=1 filter guarantees private ownership
+            "current_ownership": ownership,
             "gearbox": gearbox,
             "subtitle": sub_model_text,
+            "feed_bucket": bucket,
+            "ad_type": ad_type or None,
         }
 
     return result

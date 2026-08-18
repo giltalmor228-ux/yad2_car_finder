@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from urllib.parse import urlencode
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 from yad2_car_bot.models import SearchGroup, SearchProfile
 
@@ -82,3 +82,14 @@ def build_search_urls(
         return [build_search_url(profile)]
 
     return [_build_group_url(profile, group) for group in profile.search_groups]
+
+
+def with_page(url: str, page: int) -> str:
+    """Return *url* with ``page`` query param set (omit for page 1)."""
+    if page < 1:
+        raise ValueError("page must be >= 1")
+    parts = urlparse(url)
+    params = [(k, v) for k, v in parse_qsl(parts.query, keep_blank_values=True) if k != "page"]
+    if page > 1:
+        params.append(("page", str(page)))
+    return urlunparse(parts._replace(query=urlencode(params)))

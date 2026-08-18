@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS listing_details (
     km TEXT,
     color TEXT,
     current_ownership TEXT,
+    original_ownership TEXT,
     test_valid_until TEXT,
     gearbox TEXT,
     date_on_road TEXT,
@@ -138,7 +139,18 @@ class SQLiteStore:
         self._conn = sqlite3.connect(str(self.db_path))
         self._conn.row_factory = sqlite3.Row
         self._conn.executescript(_SCHEMA)
+        self._migrate_schema()
         self._conn.commit()
+
+    def _migrate_schema(self) -> None:
+        """Apply lightweight additive migrations for existing DBs."""
+        detail_cols = {
+            r[1] for r in self.conn.execute("PRAGMA table_info(listing_details)")
+        }
+        if "original_ownership" not in detail_cols:
+            self.conn.execute(
+                "ALTER TABLE listing_details ADD COLUMN original_ownership TEXT"
+            )
 
     def close(self) -> None:
         if self._conn:
@@ -236,20 +248,30 @@ class SQLiteStore:
                 self.conn.execute(
                     """
                     INSERT INTO listing_details (
-                        listing_id, km, color, current_ownership, test_valid_until,
-                        gearbox, date_on_road, engine_type, body_type, seats,
-                        horse_power, engine_cc, combined_fuel_consumption,
+                        listing_id, km, color, current_ownership, original_ownership,
+                        test_valid_until, gearbox, date_on_road, engine_type, body_type,
+                        seats, horse_power, engine_cc, combined_fuel_consumption,
                         location, description, phone_available, parsed_at
-                    ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                     """,
                     (
                         card.listing_id,
-                        detail.km, detail.color, detail.current_ownership,
-                        detail.test_valid_until, detail.gearbox, detail.date_on_road,
-                        detail.engine_type, detail.body_type, detail.seats,
-                        detail.horse_power, detail.engine_cc,
-                        detail.combined_fuel_consumption, detail.location,
-                        detail.description, int(detail.phone_available),
+                        detail.km,
+                        detail.color,
+                        detail.current_ownership,
+                        detail.original_ownership,
+                        detail.test_valid_until,
+                        detail.gearbox,
+                        detail.date_on_road,
+                        detail.engine_type,
+                        detail.body_type,
+                        detail.seats,
+                        detail.horse_power,
+                        detail.engine_cc,
+                        detail.combined_fuel_consumption,
+                        detail.location,
+                        detail.description,
+                        int(detail.phone_available),
                         detail.parsed_at.isoformat(),
                     ),
                 )

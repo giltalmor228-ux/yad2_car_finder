@@ -2,6 +2,15 @@
 from click.testing import CliRunner
 
 from yad2_car_bot.cli import cli
+from yad2_car_bot.notify import NotifyTargets
+
+
+def _notify_targets() -> NotifyTargets:
+    return NotifyTargets(
+        channels=("telegram",),
+        telegram_token="token",
+        telegram_chat_id="chat",
+    )
 
 
 def test_watch_seed_then_new_only(tmp_path, mocker, app_config):
@@ -22,8 +31,7 @@ def test_watch_seed_then_new_only(tmp_path, mocker, app_config):
             mocker.Mock(),
             ["https://www.yad2.co.il/vehicles/cars?manufacturer=17"],
             str(tmp_path / "watch.sqlite"),
-            "token",
-            "chat",
+            _notify_targets(),
         ),
     )
     mocker.patch("yad2_car_bot.cli._run_pipeline", side_effect=fake_pipeline)
@@ -45,7 +53,7 @@ def test_watch_seed_then_new_only(tmp_path, mocker, app_config):
     assert "[WATCH] Stopped." in result.output
 
 
-def test_watch_no_seed_uses_new_only(tmp_path, mocker, app_config):
+def test_watch_default_notifies_new_on_first_cycle(tmp_path, mocker, app_config):
     calls: list[str] = []
 
     def pipeline(**kwargs):
@@ -59,8 +67,7 @@ def test_watch_no_seed_uses_new_only(tmp_path, mocker, app_config):
             mocker.Mock(),
             ["https://example.com"],
             str(tmp_path / "watch.sqlite"),
-            "token",
-            "chat",
+            _notify_targets(),
         ),
     )
     mocker.patch("yad2_car_bot.cli._run_pipeline", side_effect=pipeline)
@@ -68,11 +75,12 @@ def test_watch_no_seed_uses_new_only(tmp_path, mocker, app_config):
 
     result = CliRunner().invoke(
         cli,
-        ["watch", "--http", "--dry-run", "--no-seed-first", "--interval-minutes", "1"],
+        ["watch", "--http", "--dry-run", "--interval-minutes", "1"],
     )
 
     assert result.exit_code == 0, result.output
     assert calls == ["new_only"]
+    assert "new-to-db" in result.output.lower() or "new listings only" in result.output.lower()
 
 
 def test_run_pipeline_new_only_skips_known(tmp_path, mocker, app_config, search_card_html):
@@ -81,11 +89,12 @@ def test_run_pipeline_new_only_skips_known(tmp_path, mocker, app_config, search_
 
     client = mocker.Mock()
     client.get_page.return_value = search_card_html
-    mocker.patch("yad2_car_bot.telegram.notifier.send_notification", return_value=True)
+    mocker.patch("yad2_car_bot.notify.send_via_channels", return_value=True)
     mocker.patch("yad2_car_bot.cli.time.sleep")
 
     db = tmp_path / "pipe.sqlite"
     urls = ["https://www.yad2.co.il/vehicles/cars?x=1"]
+    targets = _notify_targets()
 
     with SQLiteStore(db) as store:
         seed = _run_pipeline(
@@ -93,8 +102,7 @@ def test_run_pipeline_new_only_skips_known(tmp_path, mocker, app_config, search_
             client=client,
             store=store,
             search_urls=urls,
-            token="t",
-            chat_id="c",
+            notify_targets=targets,
             dry_run=True,
             notify_mode="none",
         )
@@ -107,8 +115,7 @@ def test_run_pipeline_new_only_skips_known(tmp_path, mocker, app_config, search_
             client=client,
             store=store,
             search_urls=urls,
-            token="t",
-            chat_id="c",
+            notify_targets=targets,
             dry_run=True,
             notify_mode="new_only",
         )

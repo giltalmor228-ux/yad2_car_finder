@@ -177,3 +177,47 @@ def test_notify_all_matches_forces_notify(app_config):
     matches = match_keywords(detail.description, card.tags, app_config.keyword_rules)
     scored = score_listing(card, detail, matches, rules)
     assert scored.decision == "notify"
+
+
+def test_rejects_non_private_original_ownership(app_config):
+    rules = dict(app_config.scoring_rules)
+    card = _make_card()
+    detail = _make_detail(
+        current_ownership="פרטית",
+        original_ownership="ליסינג",
+    )
+    scored = score_listing(card, detail, [], rules)
+    assert scored.decision == "rejected"
+    assert scored.score == 0
+    assert any("original_ownership" in f for f in scored.flags)
+
+
+def test_allows_private_original_ownership(app_config):
+    rules = dict(app_config.scoring_rules)
+    card = _make_card()
+    detail = _make_detail(
+        current_ownership="פרטית",
+        original_ownership="פרטית",
+    )
+    scored = score_listing(card, detail, [], rules)
+    assert scored.decision != "rejected"
+
+
+def test_missing_original_ownership_allowed_by_default(app_config):
+    rules = dict(app_config.scoring_rules)
+    card = _make_card()
+    detail = _make_detail(original_ownership=None)
+    scored = score_listing(card, detail, [], rules)
+    assert scored.decision != "rejected"
+
+
+def test_original_ownership_filter_can_be_disabled(app_config):
+    rules = dict(app_config.scoring_rules)
+    rules["original_ownership_filter"] = {
+        "enabled": False,
+        "rejected_substrings": ["ליסינג"],
+    }
+    card = _make_card()
+    detail = _make_detail(original_ownership="ליסינג")
+    scored = score_listing(card, detail, [], rules)
+    assert scored.decision != "rejected"

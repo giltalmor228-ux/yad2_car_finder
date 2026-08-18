@@ -15,7 +15,7 @@ def test_collect_http_writes_out_file(tmp_path, mocker):
     assert result.exit_code == 0, result.output
     assert out.read_text(encoding="utf-8") == HTML
     assert "saved" in result.output.lower()
-    assert "recognized listing cards:" in result.output.lower()
+    assert "recognized listing cards across pages:" in result.output.lower()
     assert "[HTTP]" in result.output
 
 

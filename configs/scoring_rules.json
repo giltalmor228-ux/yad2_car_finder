@@ -3,6 +3,20 @@
   "hard_reject_score": 0,
   "notify_all_matches": true,
   "minimum_score_to_notify": 0,
+  "original_ownership_filter": {
+    "enabled": true,
+    "reject_when_missing": false,
+    "allowed_substrings": ["פרטי", "פרטית"],
+    "rejected_substrings": [
+      "ליסינג",
+      "חברה",
+      "השכרה",
+      "מסחרי",
+      "צי רכב",
+      "סוכנות",
+      "חכירה"
+    ]
+  },
   "positive": {
     "private_ownership": 10,
     "first_or_second_hand": 10,

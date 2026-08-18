@@ -1,6 +1,6 @@
 # Yad2 Car Finder Bot
 
-A debug-first, file-driven Yad2 car listing monitoring pipeline with Telegram notifications.
+A debug-first, file-driven Yad2 car listing monitoring pipeline with Telegram and/or email notifications.
 
 Current operator notes (how to change the search and how to run collection) are in [PROJECT_STATUS.md](PROJECT_STATUS.md).
 
@@ -23,7 +23,7 @@ Current operator notes (how to change the search and how to run collection) are 
 - Parses search result cards and detail pages using stable `data-testid` selectors
 - Matches Hebrew keywords (hard reject / soft flags / positive)
 - Scores listings with an auditable breakdown
-- Sends Telegram notifications with images
+- Sends Telegram and/or email notifications (same listing text; Telegram can include images)
 - Stores results in SQLite with deduplication
 - Debug mode: saves raw HTML snapshots
 
@@ -54,7 +54,10 @@ python -m yad2_car_bot.cli collect --browser --out debug_snapshots/search.html
 
 ```bash
 cp .env.example .env
-# Edit .env and fill in TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID
+# Edit .env:
+# - NOTIFY_CHANNELS=telegram (default), email, or both
+# - Telegram: TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID
+# - Email: SMTP_HOST, SMTP_USER, SMTP_PASSWORD, EMAIL_TO (and optional SMTP_FROM/PORT)
 ```
 
 ### 3. Verify configuration
@@ -108,7 +111,8 @@ new search tab in the attached Chrome.
 
 ## CLI Commands
 
-All commands are **dry-run by default** — no Telegram messages are sent unless `--send` is passed.
+All commands are **dry-run by default** — no notifications are sent unless `--send` is passed.
+Choose the channel with `--notify telegram|email|both` (or `NOTIFY_CHANNELS` in `.env`).
 
 ```bash
 # Validate config files and metadata
@@ -120,7 +124,7 @@ python -m yad2_car_bot.cli build-url
 # Fetch the live Yad2 search page and save the HTML (HTTP client; no scoring/Telegram)
 python -m yad2_car_bot.cli collect --http --out debug_snapshots/search.html
 
-# Same collection using the attached/visible Chrome (starts as soon as listing cards appear)
+# Same collection using the attached/visible Chrome (waits for listing cards to stabilize)
 python -m yad2_car_bot.cli collect --browser --out debug_snapshots/search.html
 
 # Parse a search result HTML sample
@@ -138,8 +142,14 @@ python -m yad2_car_bot.cli render-telegram-sample
 # Run the full pipeline once (dry-run by default)
 python -m yad2_car_bot.cli run-once --dry-run
 
-# Run and actually send Telegram notifications
+# Run and actually send notifications (Telegram by default)
 python -m yad2_car_bot.cli run-once --send
+
+# Email only (needs SMTP_* + EMAIL_TO in .env)
+python -m yad2_car_bot.cli run-once --send --notify email
+
+# Both Telegram and email
+python -m yad2_car_bot.cli run-once --send --notify both
 
 # Use a visible Chrome window when the plain HTTP client receives browser verification.
 python -m yad2_car_bot.cli run-once --browser --dry-run

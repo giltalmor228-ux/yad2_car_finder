@@ -153,7 +153,91 @@ def test_parse_next_data_empty_on_missing_section():
     assert parse_next_data(html) == {}
 
 
-
 def test_parsed_at_is_set(search_card_html):
     cards = parse_search_page(search_card_html)
     assert cards[0].parsed_at is not None
+
+
+def test_feed_cards_include_commercial_and_platinum_buckets():
+    from pathlib import Path
+
+    from yad2_car_bot.parsers.search_parser import (
+        parse_search_feed_cards,
+        parse_search_page_dom,
+    )
+
+    snapshot = Path("debug_snapshots/search.html")
+    if not snapshot.exists():
+        pytest.skip("debug_snapshots/search.html not present")
+
+    html = snapshot.read_text(encoding="utf-8")
+    dom_cards = parse_search_page_dom(html)
+    feed_cards = parse_search_feed_cards(html)
+
+    assert len(feed_cards) > len(dom_cards)
+    assert len(feed_cards) >= 40
+
+    suzuki_models = {"קרוסאובר", "בלנו", "סוויפט"}
+    suzuki = [
+        c
+        for c in feed_cards
+        if c.title and "סוזוקי" in c.title and any(m in c.title for m in suzuki_models)
+    ]
+    # Snapshot has 2 private + commercial/platinum for קרוסאובר alone.
+    assert len(suzuki) >= 4
+    assert {c.listing_id for c in suzuki} >= {"xl2u4hfq", "ji8abpir", "qavmgsxv", "myc16xtn"}
+
+
+def test_parse_search_page_prefers_feed_over_dom():
+    from pathlib import Path
+
+    snapshot = Path("debug_snapshots/search.html")
+    if not snapshot.exists():
+        pytest.skip("debug_snapshots/search.html not present")
+
+    html = snapshot.read_text(encoding="utf-8")
+    cards = parse_search_page(html)
+    assert any("feed:" in f for c in cards for f in c.source_flags)
+    assert cards[0].parser_provenance == "search_parser.parse_search_feed"
+
+
+def test_parse_next_data_does_not_force_private_on_agency():
+    html = _make_next_data_html([])
+    # Rebuild with commercial listing in commercial bucket.
+    payload = {
+        "props": {
+            "pageProps": {
+                "dehydratedState": {
+                    "queries": [
+                        {
+                            "state": {
+                                "data": {
+                                    "private": [],
+                                    "commercial": [
+                                        {
+                                            "token": "agency1",
+                                            "adType": "commercial",
+                                            "customer": {"agencyName": "יוני קאר"},
+                                            "engineType": {"text": "בנזין"},
+                                            "address": {"area": {"text": "חיפה"}},
+                                            "subModel": {"text": "אוט׳"},
+                                            "metaData": {"coverImage": "https://img/a.jpeg"},
+                                        }
+                                    ],
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+    html = (
+        '<script id="__NEXT_DATA__" type="application/json">'
+        + json.dumps(payload)
+        + "</script>"
+    )
+    result = parse_next_data(html)
+    assert "agency1" in result
+    assert result["agency1"]["current_ownership"] == "סוכנות (יוני קאר)"
+    assert "פרטי" not in (result["agency1"]["current_ownership"] or "")

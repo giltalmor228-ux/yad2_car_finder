@@ -30,14 +30,15 @@ class BrowserYad2Client:
     The collector intentionally does not automate browser verification. It shells
     out to a small Node.js script (``js_browser/fetch_page.js``) that opens the
     requested page in a visible Chrome window and waits until listing cards
-    appear. The Python side never touches Playwright directly; it only launches
-    the Node process and reads back the confirmed page HTML from a temp file.
+    appear, stabilize, and scroll-load more cards when the feed lazy-loads them.
+    The Python side never touches Playwright directly; it only launches the Node
+    process and reads back the confirmed page HTML from a temp file.
     """
 
     def __init__(
         self,
         browser_channel: str | None = None,
-        timeout_ms: int = 60_000,
+        timeout_ms: int = 90_000,
         node_executable: str | None = None,
     ):
         self.browser_channel = browser_channel or os.getenv(
@@ -101,7 +102,7 @@ class BrowserYad2Client:
         if page_kind == "detail":
             print("Collecting detail page content.")
         else:
-            print("Collecting as soon as listing cards appear.")
+            print("Collecting after listing cards stabilize + scroll-load.")
 
         try:
             result = subprocess.run(

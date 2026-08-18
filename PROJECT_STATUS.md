@@ -8,7 +8,7 @@ The Python pipeline (URL builder, parsers, keyword matching, scoring, SQLite, Te
 
 Collection works by attaching Playwright (JS) to a Chrome window you start yourself with remote debugging. On 2026-08-15 this successfully found **34 car listing cards** on the live search page.
 
-There is **no “press Enter” step**. After attach, the collector navigates the existing Chrome tab to the search URL and snapshots as soon as listing cards appear.
+There is **no “press Enter” step**. After attach, the collector navigates the existing Chrome tab to the search URL, waits for listing cards to stabilize, scroll-loads the feed, then **paginates with ``page=2..N`` until the last page / empty / fetch failure**. Search parsing uses all `__NEXT_DATA__` feed buckets (private + commercial + platinum + solo).
 
 Use the project `.venv` for all CLI commands. System `python3` does not have the package dependencies (`bs4`, etc.).
 
@@ -22,7 +22,7 @@ source .venv/bin/activate
 
 1. Python venv: `.venv` with `pip install -r requirements.txt` and `pip install -e .`
 2. Node.js + Playwright JS: `cd js_browser && npm install`
-3. Copy `.env.example` to `.env` and fill Telegram credentials only if you want `--send`
+3. Copy `.env.example` to `.env` and fill Telegram and/or SMTP credentials if you want `--send`
 
 ---
 
@@ -122,7 +122,9 @@ IDs from `data/yad2_filter_metadata.json`:
 These are not the search URL; they decide which listings to keep/notify:
 
 - [configs/listing_keyword_rules.json](configs/listing_keyword_rules.json) — Hebrew hard rejects, soft flags, positives
-- [configs/scoring_rules.json](configs/scoring_rules.json) — score factors and notify threshold
+- [configs/scoring_rules.json](configs/scoring_rules.json) — score factors, notify threshold, and `original_ownership_filter` (reject ליסינג/חברה as original ownership)
+
+Search collection reads **all** `__NEXT_DATA__` feed buckets (private + commercial + platinum + solo), not only private DOM cards. That way agency/platinum ads visible on the page are included.
 
 ### Check the new search
 
@@ -183,24 +185,40 @@ python -m yad2_car_bot.cli parse-search-sample debug_snapshots/search-2.html
 
 ### 3b. Full bot pipeline (parse, score, SQLite)
 
-Dry-run (recommended first; no Telegram):
+Dry-run (recommended first; no notifications):
 
 ```bash
 python -m yad2_car_bot.cli run-once --browser --dry-run
 ```
 
-Send Telegram (needs `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` in `.env`):
+Send notifications (needs credentials in `.env` for the selected channels):
 
 ```bash
+# Telegram (default NOTIFY_CHANNELS=telegram)
 python -m yad2_car_bot.cli run-once --browser --send
+
+# Email only
+python -m yad2_car_bot.cli run-once --browser --send --notify email
+
+# Both
+python -m yad2_car_bot.cli run-once --browser --send --notify both
 ```
 
-Listings are stored in `data/yad2_car_monitor.sqlite`. The bot will not notify twice for the same listing unless the score or price changes materially.
+Listings are stored in `data/yad2_car_monitor.sqlite`. After each `run-once` /
+`watch` cycle the bot also refreshes `data/listings_export.csv` (same fields as
+the email/Telegram message). Export anytime with:
+
+```bash
+python -m yad2_car_bot.cli export-csv
+```
+
+The bot will not notify twice for the same listing unless the score or price changes materially.
 
 ### 3c. Watch every 15 minutes (new ads only)
 
 Keeps Chrome attached, refreshes all search groups on an interval, compares to
-SQLite from the previous cycle, and Telegram-notifies **only brand-new** listings.
+SQLite from the previous cycle, and notifies **only brand-new** listings
+(Telegram and/or email).
 
 ```bash
 # First cycle = baseline (store only). Then every 15 min → new ads only.
@@ -213,8 +231,8 @@ python -m yad2_car_bot.cli watch --browser --dry-run
 python -m yad2_car_bot.cli watch --browser --send --interval-minutes 15
 ```
 
-Stop with Ctrl+C. Use `--no-seed-first` if you want the first cycle to notify
-immediately for ads not already in the DB.
+Stop with Ctrl+C. By default the **first cycle already notifies** for ads not
+in the DB. Use `--seed-first` only if you want a silent baseline cycle first.
 
 ---
 
