@@ -161,6 +161,7 @@ Leave this window open. Complete any Yad2 verification in that window if asked (
 In the project terminal:
 
 ```bash
+cd /Users/gilta/Library/CloudStorage/OneDrive-Mobileye/Desktop/Gil/yad2_car_finder
 source .venv/bin/activate
 export PLAYWRIGHT_CDP_URL=http://127.0.0.1:9222
 ```

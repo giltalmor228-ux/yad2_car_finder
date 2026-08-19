@@ -1,0 +1,24 @@
+---
+description: Route non-trivial Yad2 Car Finder work through the feature-intake skill and its gates
+alwaysApply: true
+---
+
+For non-trivial features, fixes, behavior changes, investigations, or refactors, prefer the `feature-intake` Skill.
+
+The Skill owns orchestration:
+
+- Task Brief
+- risk class and path
+- architect delegation when required
+- validation-planner gate when required
+- bounded architecture revision
+- planner delegation
+- final implementation packet
+
+Do not duplicate that workflow in agent bodies or ad-hoc task prompts.
+
+Do not bypass the validation gate for architecture-sensitive or collection/privacy-critical changes.
+
+Direct `@planner` use is allowed only when triage classified `LOCAL_KNOWN_DESIGN` or `TRIVIAL` was already completed, contracts are unchanged, and live collection behavior is unchanged.
+
+`@planner` must not start after Gate `REVISE` or `BLOCKED`.

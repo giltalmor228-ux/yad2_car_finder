@@ -1,0 +1,29 @@
+---
+description: Architecture and planning gates for Yad2 pipeline, collector, parser, storage, and notify contracts
+globs: ["src/**/*.py", "js_browser/**/*.js", "configs/**/*.json", "data/*.json", "docs/**/*.md"]
+---
+
+When a change can affect CLI `collect` / `run-once` / `watch`, `search_groups` URL semantics, parsers, `js_browser/fetch_page.js`, HTTP/browser clients, SQLite schema or `should_notify`, notify channels, or `CSV_COLUMNS`:
+
+- run `@architect` before implementation;
+- run `@validation_planner` after `@architect`;
+- run `@planner` only after Gate `APPROVED` or `APPROVED_WITH_CONDITIONS`.
+
+Architecture-sensitive includes:
+
+- `src/yad2_car_bot/cli.py` pipeline and `notify_mode`
+- `url_builder.py` / `validators.py` caps (4 manufacturers, 4 models per group)
+- `parsers/` and `__NEXT_DATA__` / `data-testid` / `data-nagish` contracts
+- `search_pages.py` pagination
+- `browser_client.py` and `js_browser/fetch_page.js` (CDP, reuse-tab, page-kind)
+- `storage/sqlite_store.py` and `csv_export.py`
+- `notify.py` / Telegram / email payload shape
+- `models.py` listing and decision contracts
+
+Do not let `@planner` approve architecture it depends on.
+
+`PLAYWRIGHT_REUSE_TAB` is not a default. Only reuse a tab that already shows listing cards.
+
+Keep Python orchestration separate from the Node collector. Do not drive Playwright from Python.
+
+Keyword/score JSON weight edits with unchanged decision vocabulary and unchanged URL/parser/storage contracts may use planner-only after triage says `LOCAL_KNOWN_DESIGN`.

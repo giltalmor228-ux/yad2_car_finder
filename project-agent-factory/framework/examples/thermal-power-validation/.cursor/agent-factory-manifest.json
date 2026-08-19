@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0",
+  "factory_version": "1.0.0",
+  "generated_at": "2026-07-22T09:00:00+03:00",
+  "operating_mode": "EXISTING_ECOSYSTEM_UPGRADE",
+  "project_name": "BSR Thermal Power Standalone",
+  "workflow_entry_skill": "feature-intake",
+  "agents": [
+    "workflow_triage",
+    "architect",
+    "validation_planner",
+    "planner"
+  ],
+  "rules": [
+    "01-project-core",
+    "02-architecture-and-planning",
+    "03-validation-and-doc-update",
+    "04-feature-intake-workflow"
+  ],
+  "factory_owned_files": [
+    {
+      "path": ".cursor/agents/architect.md",
+      "role": "agent",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "f53058add54b89df8231df33ce978d1af3c9d7a05d65475a34fa2c3b16d283b0"
+    },
+    {
+      "path": ".cursor/agents/planner.md",
+      "role": "agent",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "82b146d24338f4d48f01f81d73057ac6cc2aa59c021b105ac979f43fa113da0b"
+    },
+    {
+      "path": ".cursor/agents/validation_planner.md",
+      "role": "agent",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "77f70214f12be73653d8a7838e6ea0c0eeef43f1b0f97d6b22d7d27af2ec62e0"
+    },
+    {
+      "path": ".cursor/agents/workflow_triage.md",
+      "role": "agent",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "8f5825fad5f8e4e7c4df7f60b3e48fef7a4dd7bcbe87786a8e6bef87237d6324"
+    },
+    {
+      "path": ".cursor/rules/01-project-core.mdc",
+      "role": "rule",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "f8c36d5fe8ccc46fd3877330a500e3b6d17ffbab60a174caa3a18b037c09bdd4"
+    },
+    {
+      "path": ".cursor/rules/02-architecture-and-planning.mdc",
+      "role": "rule",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "5ceaee89830e5aef3de3a1f17d2f866f7fdbb1e29d08eadd8740113606d98e38"
+    },
+    {
+      "path": ".cursor/rules/03-validation-and-doc-update.mdc",
+      "role": "rule",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "0505f8cf81ea9c44f55909b6d514533ec9615818dc7c177949b90395928ba42b"
+    },
+    {
+      "path": ".cursor/rules/04-feature-intake-workflow.mdc",
+      "role": "rule",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "fe23c736c7283202e2d60c3ebad6260a72ad4480a1a787d1a078ea7c57be95c5"
+    },
+    {
+      "path": ".cursor/skills/feature-intake/SKILL.md",
+      "role": "workflow-skill",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "1570ca4bacf053cae0f3fcd794e24843d4b127dae2fe9dabb493560fb748bb82"
+    },
+    {
+      "path": ".cursor/skills/feature-intake/references/architect-handoff-template.md",
+      "role": "skill-reference",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "6a0e4f5fec59959937935edf9ff2b46e88bbed50c81f973e097ac178449746b4"
+    },
+    {
+      "path": ".cursor/skills/feature-intake/references/final-packet-template.md",
+      "role": "skill-reference",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "e81911b58dcada4cf1b213cc8354d19915a6075e4768e0a230be585312c7a1ad"
+    },
+    {
+      "path": ".cursor/skills/feature-intake/references/planner-handoff-template.md",
+      "role": "skill-reference",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "007360ab9b36f04bc5e46b5e7cfc2cdd7d3053838abdc9261b21679eeb665447"
+    },
+    {
+      "path": ".cursor/skills/feature-intake/references/task-brief-template.md",
+      "role": "skill-reference",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "29c2558fddcc7d86e78de36a7d457d7f354770c20d98b2ca7f3a7ae898a054b5"
+    },
+    {
+      "path": ".cursor/skills/feature-intake/references/validation-gate-template.md",
+      "role": "skill-reference",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "ae29559fc0d9226b31ba78dff64dedfc083adc03b19fa7b56154ba88f89cf02a"
+    },
+    {
+      "path": ".cursor/skills/feature-intake/references/workflow-state-template.md",
+      "role": "skill-reference",
+      "evidence": [
+        "USER_SUPPLIED_ECOSYSTEM",
+        "PROJECT_DESCRIPTION"
+      ],
+      "sha256": "ab5209a92a4c80d1bbd710e79e5ff67057613bd4723560f7d6b5ded580e53c23"
+    }
+  ],
+  "preserved_files": [],
+  "conflicts": [],
+  "to_verify": [
+    "Replace the compact reference status document with the target repository's maintained docs/PROJECT_STATUS_DETAILED.md when applying this example."
+  ]
+}

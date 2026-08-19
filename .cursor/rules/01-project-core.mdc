@@ -1,0 +1,22 @@
+---
+description: Core invariants for the Yad2 Car Finder Bot — venv CLI, file-driven search, user-assisted collection, privacy, and stale-doc handling
+alwaysApply: true
+---
+
+Always read `PROJECT_STATUS.md` before changing how the operator configures search or runs collection.
+
+Use the project `.venv` for CLI and pytest. System `python3` does not provide package deps.
+
+Search filters are not CLI arguments. Live search is `configs/search_profile_primary.json`. That file is authoritative for the current brand/model groups. The manufacturer table in `PROJECT_STATUS.md` may be stale; do not silently rewrite the live profile to match the status doc.
+
+Live Yad2 data requires `--browser` and operator Chrome (CDP). `--http` is not the live path; Radware verification HTML is a failure, not listings.
+
+Do not solve Radware/captchas, forge tokens, or add headless verification bypass.
+
+Do not store or send raw seller phone numbers. Persist only `phone_available`.
+
+Do not copy `.env` secrets, tokens, or personal listing payloads into chat artifacts.
+
+If validated operator-visible behavior changes, update `PROJECT_STATUS.md` and `README.md` as applicable.
+
+For non-trivial features, fixes, investigations, or refactors, prefer the `feature-intake` Skill. Do not bypass its architecture validation gate for architecture-sensitive or collection/privacy-critical work.

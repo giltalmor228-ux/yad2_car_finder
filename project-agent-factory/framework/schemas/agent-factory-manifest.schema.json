@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/project-agent-factory/agent-factory-manifest.schema.json",
+  "title": "Project Agent Factory Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "factory_version",
+    "generated_at",
+    "operating_mode",
+    "project_name",
+    "workflow_entry_skill",
+    "factory_owned_files",
+    "preserved_files",
+    "conflicts",
+    "to_verify"
+  ],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "factory_version": {"type": "string"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "operating_mode": {
+      "enum": [
+        "REPOSITORY_PLUS_BRIEF",
+        "REPOSITORY_DISCOVERY",
+        "BRIEF_ONLY_PROVISIONAL",
+        "EXISTING_ECOSYSTEM_UPGRADE"
+      ]
+    },
+    "project_name": {"type": "string", "minLength": 1},
+    "workflow_entry_skill": {"type": "string", "minLength": 1},
+    "agents": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "rules": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "factory_owned_files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "role", "evidence"],
+        "properties": {
+          "path": {"type": "string"},
+          "role": {"type": "string"},
+          "evidence": {"type": "array", "items": {"type": "string"}},
+          "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"}
+        }
+      }
+    },
+    "preserved_files": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["original", "candidate", "reason"],
+        "properties": {
+          "original": {"type": "string"},
+          "candidate": {"type": "string"},
+          "reason": {"type": "string"}
+        }
+      }
+    },
+    "to_verify": {"type": "array", "items": {"type": "string"}}
+  }
+}

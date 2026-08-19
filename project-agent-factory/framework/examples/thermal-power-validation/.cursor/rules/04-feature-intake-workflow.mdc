@@ -1,0 +1,30 @@
+---
+description: Route non-trivial features and fixes through the one-command feature-intake workflow
+alwaysApply: true
+---
+
+For non-trivial feature requests, fixes, behavior changes, investigations, or refactors, prefer the `feature-intake` Skill.
+
+The Skill owns the workflow:
+
+- Task Brief
+- architect delegation
+- validation-planner gate
+- architecture revision loop
+- planner delegation
+- final implementation packet
+
+Do not duplicate the complete workflow in:
+- `AGENTS.md`
+- architect instructions
+- planner instructions
+- task prompts
+
+Do not bypass the validation gate for architecture-sensitive or runtime-sensitive changes.
+
+Direct planner usage is allowed only when:
+- architecture is established
+- runtime and hardware behavior are unchanged
+- contracts are unchanged
+- the change was classified as planner-only
+

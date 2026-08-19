@@ -1,0 +1,30 @@
+---
+description: Validation and documentation requirements
+globs: ["src/**/*.py", "scripts/**/*.py", "docs/**/*.md"]
+---
+
+Unit tests alone are not sufficient for runtime pipeline changes.
+
+If a change affects:
+- telemetry mapping
+- segmentation
+- samples.csv
+- regime_variables.csv
+- regime_variables_model.csv
+- feature.csv
+- Stage A / Stage B outputs
+- validation artifacts
+- hardware lifecycle timing
+- runtime collection phases
+
+require:
+- real-run or real-artifact validation
+- output inspection
+- contract validation
+- documentation update if behavior changed
+
+Do not consider the task complete until:
+- relevant validation passes
+- required outputs exist
+- docs are aligned
+

@@ -1,0 +1,22 @@
+---
+description: Require architecture and planning discipline for complex changes
+globs: ["src/**/*.py", "scripts/**/*.py", "docs/**/*.md"]
+---
+
+For complex features, refactors, or data-flow changes:
+- use `@architect` before implementation when architecture is unclear or sensitive
+- use `@validation_planner` after `@architect` for architecture-sensitive or runtime-sensitive work
+- use `@planner` only after the architecture gate is approved when a validation gate is required
+
+Architecture-sensitive means changes touching:
+- collection flow
+- telemetry assignment
+- segmentation
+- CSV contracts
+- metadata propagation
+- Stage A / Stage B data flow
+- validation logic
+- hardware lifecycle
+- runtime phase/state transitions
+- power/radar/oven interaction timing
+

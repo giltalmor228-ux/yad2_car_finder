@@ -1,0 +1,27 @@
+---
+description: Validation evidence and documentation updates for Yad2 Car Finder changes
+globs: ["src/**/*.py", "tests/**/*.py", "js_browser/**/*.js", "configs/**/*.json", "docs/**/*.md", "PROJECT_STATUS.md", "README.md"]
+---
+
+Pytest is required for code changes and is not sufficient for live Yad2 markup, CDP attach, or pagination on real search pages.
+
+Use only verified commands (from `.venv`):
+
+- `pytest tests/ -v` or named files under `tests/`
+- `python -m yad2_car_bot.cli validate-config`
+- `python -m yad2_car_bot.cli build-url`
+- `python -m yad2_car_bot.cli parse-search-sample <html>`
+- `python -m yad2_car_bot.cli parse-detail-sample <html>`
+- `python -m yad2_car_bot.cli collect --browser --out debug_snapshots/search.html`
+- `python -m yad2_car_bot.cli run-once --browser --dry-run`
+- `python -m yad2_car_bot.cli export-csv`
+
+If parsers, `fetch_page.js` selectors, or `__NEXT_DATA__` handling change, require a saved HTML snapshot and parse output, plus live `collect --browser` when the operator can attach Chrome. Do not treat mocked Node tests as live collection proof.
+
+If search profile IDs or groups change, require `validate-config` and `build-url` before claiming the search is valid.
+
+If notification fields change, update `docs/telegram_message_template.md` and keep `src/yad2_car_bot/csv_export.py` `CSV_COLUMNS` aligned. Prove with `tests/test_telegram_renderer.py` and `tests/test_csv_export.py`.
+
+If operator procedure, `--browser` attach, watch/notify behavior, or CLI flags change, update `PROJECT_STATUS.md` and `README.md` so they do not disagree. Record remaining doc/code conflicts instead of silently picking one.
+
+Do not consider collection/privacy-critical work complete until dry-run succeeded or the task is explicitly blocked waiting for Chrome, and no raw phone numbers were introduced.

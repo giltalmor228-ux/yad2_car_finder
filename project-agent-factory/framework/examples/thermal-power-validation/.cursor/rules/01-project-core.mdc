@@ -1,0 +1,24 @@
+---
+description: Core project behavior for the BSR thermal / power / telemetry repo
+alwaysApply: true
+---
+
+Always read `docs/PROJECT_STATUS_DETAILED.md` before making significant architecture, pipeline, or validation-sensitive changes.
+
+Treat this repo as:
+- run-centric
+- artifact-driven
+- validation-first
+- hardware-coupled but partially replayable offline
+
+Do not silently change:
+- CSV contracts
+- key semantics
+- metadata propagation
+- Stage A / Stage B artifact behavior
+
+If validated behavior materially changes, update `docs/PROJECT_STATUS_DETAILED.md`.
+
+For non-trivial features, fixes, behavior changes, investigations, or refactors, prefer the `feature-intake` Skill as the single workflow entry point.
+
+Do not bypass its architecture validation gate for runtime-sensitive, hardware-sensitive, architecture-sensitive, or contract-sensitive work.

@@ -1,0 +1,11 @@
+---
+description: <precise persistent purpose>
+globs: ["<focused/glob/**>"]
+---
+
+When <observable condition>:
+
+- preserve <verified invariant>;
+- require <specific evidence>;
+- update <canonical documentation> if validated behavior changes;
+- stop and report <blocker> when <critical missing condition>.
